@@ -1,0 +1,2424 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zomato - Food Delivery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #e23744 0%, #ff6b6b 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+            <div class="flex justify-between items-center h-14 sm:h-16">
+                <div class="flex items-center space-x-4 sm:space-x-8">
+                    <div class="text-xl sm:text-2xl font-bold text-red-600">Zomato</div>
+                    <nav class="hidden lg:flex space-x-6">
+                        <a href="#" class="text-gray-700 hover:text-red-600 font-medium">Home</a>
+                        <a href="#" class="text-gray-700 hover:text-red-600 font-medium">Restaurants</a>
+                        <a href="#" class="text-gray-700 hover:text-red-600 font-medium">Offers</a>
+                    </nav>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden sm:flex items-center space-x-2 sm:space-x-4">
+                    <button id="cartBtn" class="relative text-gray-700 hover:text-red-600 font-medium flex items-center">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L5 3H3m4 10v6a1 1 0 001 1h10a1 1 0 001-1v-6M9 19a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"></path>
+                        </svg>
+                        <span class="hidden sm:inline">Cart</span>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center hidden text-xs">0</span>
+                    </button>
+                    <button id="loginBtn" class="text-gray-700 hover:text-red-600 font-medium text-sm sm:text-base">Login</button>
+                    <button id="signUpBtn" class="bg-red-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-red-700 transition-colors text-sm sm:text-base">Sign Up</button>
+                </div>
+
+                <!-- Mobile Hamburger Menu -->
+                <div class="sm:hidden flex items-center space-x-3">
+                    <button id="cartBtnMobile" class="relative text-gray-700 hover:text-red-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L5 3H3m4 10v6a1 1 0 001 1h10a1 1 0 001-1v-6M9 19a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"></path>
+                        </svg>
+                        <span id="cartCountMobile" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                    <button id="mobileMenuBtn" class="text-gray-700 hover:text-red-600 focus:outline-none">
+                        <svg id="hamburgerIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                        <svg id="closeIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="sm:hidden bg-white border-t border-gray-200 hidden">
+            <div class="px-4 py-3 space-y-3">
+                <!-- Navigation Links -->
+                <div class="space-y-2">
+                    <a href="#" class="block text-gray-700 hover:text-red-600 font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <svg class="w-5 h-5 inline mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                        Home
+                    </a>
+                    <a href="#" class="block text-gray-700 hover:text-red-600 font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <svg class="w-5 h-5 inline mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                        Restaurants
+                    </a>
+                    <a href="#" class="block text-gray-700 hover:text-red-600 font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <svg class="w-5 h-5 inline mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                        </svg>
+                        Offers
+                    </a>
+                </div>
+                
+                <!-- Divider -->
+                <div class="border-t border-gray-200 my-3"></div>
+                
+                <!-- User Actions -->
+                <div class="space-y-2">
+                    <button id="loginBtnMobile" class="w-full text-left text-gray-700 hover:text-red-600 font-medium py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors flex items-center">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        Login
+                    </button>
+                    <button id="signUpBtnMobile" class="w-full bg-red-600 text-white py-3 px-4 rounded-lg hover:bg-red-700 transition-colors font-medium flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                        </svg>
+                        Sign Up
+                    </button>
+                </div>
+                
+                <!-- Additional Options -->
+                <div class="border-t border-gray-200 pt-3 mt-3">
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <a href="#" class="flex items-center justify-center py-2 px-3 text-gray-600 hover:text-red-600 hover:bg-gray-50 rounded-lg transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Help
+                        </a>
+                        <a href="#" class="flex items-center justify-center py-2 px-3 text-gray-600 hover:text-red-600 hover:bg-gray-50 rounded-lg transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                            App
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-12 sm:py-16 lg:py-20">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight">Discover the best food & drinks</h1>
+            <p class="text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 opacity-90 max-w-2xl mx-auto">Order from your favorite restaurants near you</p>
+            
+            <!-- Search Bar -->
+            <div class="max-w-4xl mx-auto bg-white rounded-lg p-2 sm:p-3 shadow-lg relative">
+                <!-- Mobile Layout (Stacked) -->
+                <div class="flex flex-col sm:hidden space-y-2">
+                    <div class="flex items-center relative">
+                        <svg class="w-4 h-4 text-gray-400 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <input type="text" id="locationInput" placeholder="Enter your location" class="flex-1 p-3 text-gray-700 outline-none text-sm" autocomplete="off">
+                        <button id="detectLocation" class="text-red-600 hover:text-red-700 mr-2" title="Detect my location">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+                            </svg>
+                        </button>
+                        <div id="locationSuggestions" class="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg mt-1 shadow-lg z-10 hidden">
+                            <!-- Dynamic location suggestions will be populated here -->
+                        </div>
+                    </div>
+                    <div class="flex items-center relative">
+                        <svg class="w-4 h-4 text-gray-400 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <input type="text" id="searchInput" placeholder="Search for restaurant, cuisine or dish" class="flex-1 p-3 text-gray-700 outline-none text-sm" autocomplete="off">
+                        <div id="searchSuggestions" class="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg mt-1 shadow-lg z-10 hidden">
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b flex items-center text-black">
+                                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=24&h=24&fit=crop" alt="Pizza" class="w-6 h-6 rounded-full mr-3">Pizza
+                            </div>
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b flex items-center text-black">
+                                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=24&h=24&fit=crop" alt="Burger" class="w-6 h-6 rounded-full mr-3">Burger
+                            </div>
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b flex items-center text-black">
+                                <img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?w=24&h=24&fit=crop" alt="Biryani" class="w-6 h-6 rounded-full mr-3">Biryani
+                            </div>
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer flex items-center text-black">
+                                <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=24&h=24&fit=crop" alt="Chinese" class="w-6 h-6 rounded-full mr-3">Chinese
+                            </div>
+                        </div>
+                    </div>
+                    <button id="searchBtn" class="bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-red-700 transition-colors font-medium flex items-center justify-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Search
+                    </button>
+                </div>
+
+                <!-- Desktop Layout (Side by Side) -->
+                <div class="hidden sm:flex items-center">
+                    <div class="flex-1 flex items-center relative">
+                        <svg class="w-5 h-5 text-gray-400 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <input type="text" id="locationInputDesktop" placeholder="Enter your location" class="flex-1 p-3 text-gray-700 outline-none" autocomplete="off">
+                        <button id="detectLocationDesktop" class="text-red-600 hover:text-red-700 mr-2" title="Detect my location">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+                            </svg>
+                        </button>
+                        <div id="locationSuggestionsDesktop" class="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg mt-1 shadow-lg z-10 hidden">
+                            <!-- Dynamic location suggestions will be populated here -->
+                        </div>
+                    </div>
+                    <div class="w-px bg-gray-300 h-8"></div>
+                    <div class="flex-1 flex items-center relative">
+                        <svg class="w-5 h-5 text-gray-400 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <input type="text" id="searchInputDesktop" placeholder="Search for restaurant, cuisine or dish" class="flex-1 p-3 text-gray-700 outline-none" autocomplete="off">
+                        <div id="searchSuggestionsDesktop" class="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg mt-1 shadow-lg z-10 hidden">
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b flex items-center text-black">
+                                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=24&h=24&fit=crop" alt="Pizza" class="w-6 h-6 rounded-full mr-3">Pizza
+                            </div>
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b flex items-center text-black">
+                                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=24&h=24&fit=crop" alt="Burger" class="w-6 h-6 rounded-full mr-3">Burger
+                            </div>
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b flex items-center text-black">
+                                <img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?w=24&h=24&fit=crop" alt="Biryani" class="w-6 h-6 rounded-full mr-3">Biryani
+                            </div>
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer flex items-center text-black">
+                                <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=24&h=24&fit=crop" alt="Chinese" class="w-6 h-6 rounded-full mr-3">Chinese
+                            </div>
+                        </div>
+                    </div>
+                    <button id="searchBtnDesktop" class="bg-red-600 text-white px-4 lg:px-6 py-3 rounded-lg hover:bg-red-700 transition-colors font-medium flex items-center ml-2">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <span class="hidden lg:inline">Search</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="py-12 sm:py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800">What's on your mind?</h2>
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4 sm:gap-6">
+                <div class="text-center cursor-pointer group">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-3 bg-orange-100 rounded-full overflow-hidden group-hover:bg-red-100 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=64&h=64&fit=crop" alt="Pizza" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-red-600">Pizza</p>
+                </div>
+                <div class="text-center cursor-pointer group">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-3 bg-yellow-100 rounded-full overflow-hidden group-hover:bg-red-100 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=64&h=64&fit=crop" alt="Burger" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-red-600">Burger</p>
+                </div>
+                <div class="text-center cursor-pointer group">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-3 bg-red-100 rounded-full overflow-hidden group-hover:bg-red-100 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=64&h=64&fit=crop" alt="Noodles" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-red-600">Noodles</p>
+                </div>
+                <div class="text-center cursor-pointer group">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-3 bg-green-100 rounded-full overflow-hidden group-hover:bg-red-100 transition-colors">
+                        <img src="Chicken-Biryani-Recipe copy.jpg" alt="Biryani" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-red-600">Biryani</p>
+                </div>
+                <div class="text-center cursor-pointer group">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-3 bg-purple-100 rounded-full overflow-hidden group-hover:bg-red-100 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=64&h=64&fit=crop" alt="Mexican" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-red-600">Mexican</p>
+                </div>
+                <div class="text-center cursor-pointer group">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-3 bg-pink-100 rounded-full overflow-hidden group-hover:bg-red-100 transition-colors">
+                        <img src="berry-cheesecake.jpg" alt="Desserts" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-red-600">Desserts</p>
+                </div>
+                <div class="text-center cursor-pointer group">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-3 bg-amber-100 rounded-full overflow-hidden group-hover:bg-red-100 transition-colors">
+                        <img src="coffe.jpg" alt="Coffee" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-red-600">Coffee</p>
+                </div>
+                <div class="text-center cursor-pointer group">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-3 bg-green-100 rounded-full overflow-hidden group-hover:bg-red-100 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=64&h=64&fit=crop" alt="Healthy" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-red-600">Healthy</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Restaurants -->
+    <section class="py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-6 sm:mb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Popular restaurants</h2>
+                <button class="text-red-600 font-medium hover:text-red-700 text-sm sm:text-base">See all</button>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Restaurant Card 1 -->
+                <div class="bg-white rounded-xl shadow-md card-hover cursor-pointer">
+                    <div class="h-40 sm:h-48 bg-gradient-to-r from-orange-400 to-red-500 rounded-t-xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop" alt="Pizza" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 sm:p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg sm:text-xl font-semibold text-gray-800 truncate pr-2">Pizza Palace</h3>
+                            <div class="flex items-center bg-green-600 text-white px-2 py-1 rounded text-xs sm:text-sm flex-shrink-0">
+                                <span>4.2 ★</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2 text-sm sm:text-base">Italian, Pizza, Fast Food</p>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-gray-700 text-sm sm:text-base">₹300 for two</span>
+                            <span class="text-xs sm:text-sm text-gray-500">25-30 mins</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center text-xs sm:text-sm text-green-600">
+                                <span class="mr-1">🚚</span>
+                                <span class="hidden sm:inline">Free delivery</span>
+                                <span class="sm:hidden">Free</span>
+                            </div>
+                            <button class="bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-xs sm:text-sm font-medium add-to-cart" data-restaurant="Pizza Palace" data-price="300">
+                                <span class="hidden sm:inline">Add to Cart</span>
+                                <span class="sm:hidden">Add</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Restaurant Card 2 -->
+                <div class="bg-white rounded-xl shadow-md card-hover cursor-pointer">
+                    <div class="h-48 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-t-xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop" alt="Burger" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Burger King</h3>
+                            <div class="flex items-center bg-green-600 text-white px-2 py-1 rounded text-sm">
+                                <span>4.0 ★</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">American, Burgers, Fast Food</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">₹350 for two</span>
+                            <span class="text-sm text-gray-500">20-25 mins</span>
+                        </div>
+                        <div class="mt-3 flex items-center justify-between">
+                            <div class="flex items-center text-sm text-red-600">
+                                <span class="mr-1">🔥</span>
+                                50% OFF up to ₹100
+                            </div>
+                            <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium add-to-cart" data-restaurant="Burger King" data-price="350">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Restaurant Card 3 -->
+                <div class="bg-white rounded-xl shadow-md card-hover cursor-pointer">
+                    <div class="h-48 bg-gradient-to-r from-green-400 to-blue-500 rounded-t-xl overflow-hidden">
+                        <img src="Chicken-Biryani-Recipe copy.jpg" alt="Biryani" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Biryani House</h3>
+                            <div class="flex items-center bg-green-600 text-white px-2 py-1 rounded text-sm">
+                                <span>4.5 ★</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">Indian, Biryani, Mughlai</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">₹400 for two</span>
+                            <span class="text-sm text-gray-500">30-35 mins</span>
+                        </div>
+                        <div class="mt-3 flex items-center justify-between">
+                            <div class="flex items-center text-sm text-blue-600">
+                                <span class="mr-1">💳</span>
+                                Extra 10% OFF
+                            </div>
+                            <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium add-to-cart" data-restaurant="Biryani House" data-price="400">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Restaurant Card 4 -->
+                <div class="bg-white rounded-xl shadow-md card-hover cursor-pointer">
+                    <div class="h-48 bg-gradient-to-r from-purple-400 to-pink-500 rounded-t-xl overflow-hidden">
+                        <img src="pasta.avif" alt="Pasta" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Pasta Corner</h3>
+                            <div class="flex items-center bg-green-600 text-white px-2 py-1 rounded text-sm">
+                                <span>4.3 ★</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">Italian, Pasta, Continental</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">₹280 for two</span>
+                            <span class="text-sm text-gray-500">20-25 mins</span>
+                        </div>
+                        <div class="mt-3 flex items-center justify-between">
+                            <div class="flex items-center text-sm text-orange-600">
+                                <span class="mr-1">⚡</span>
+                                Fast delivery
+                            </div>
+                            <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium add-to-cart" data-restaurant="Pasta Corner" data-price="280">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Restaurant Card 5 -->
+                <div class="bg-white rounded-xl shadow-md card-hover cursor-pointer">
+                    <div class="h-48 bg-gradient-to-r from-red-400 to-yellow-500 rounded-t-xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop" alt="Chinese" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Dragon Wok</h3>
+                            <div class="flex items-center bg-green-600 text-white px-2 py-1 rounded text-sm">
+                                <span>4.1 ★</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">Chinese, Asian, Noodles</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">₹320 for two</span>
+                            <span class="text-sm text-gray-500">30-35 mins</span>
+                        </div>
+                        <div class="mt-3 flex items-center justify-between">
+                            <div class="flex items-center text-sm text-purple-600">
+                                <span class="mr-1">🎁</span>
+                                Buy 1 Get 1 Free
+                            </div>
+                            <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium add-to-cart" data-restaurant="Dragon Wok" data-price="320">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Restaurant Card 6 -->
+                <div class="bg-white rounded-xl shadow-md card-hover cursor-pointer">
+                    <div class="h-48 bg-gradient-to-r from-blue-400 to-green-500 rounded-t-xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=300&fit=crop" alt="Salad" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Healthy Bites</h3>
+                            <div class="flex items-center bg-green-600 text-white px-2 py-1 rounded text-sm">
+                                <span>4.4 ★</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">Healthy, Salads, Smoothies</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">₹250 for two</span>
+                            <span class="text-sm text-gray-500">15-20 mins</span>
+                        </div>
+                        <div class="mt-3 flex items-center justify-between">
+                            <div class="flex items-center text-sm text-green-600">
+                                <span class="mr-1">🌱</span>
+                                100% Organic
+                            </div>
+                            <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium add-to-cart" data-restaurant="Healthy Bites" data-price="250">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Restaurant Card 7 -->
+                <div class="bg-white rounded-xl shadow-md card-hover cursor-pointer">
+                    <div class="h-48 bg-gradient-to-r from-pink-400 to-red-500 rounded-t-xl overflow-hidden">
+                        <img src="berry-cheesecake.jpg" alt="Dessert" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Sweet Dreams</h3>
+                            <div class="flex items-center bg-green-600 text-white px-2 py-1 rounded text-sm">
+                                <span>4.6 ★</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">Desserts, Ice Cream, Cakes</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">₹200 for two</span>
+                            <span class="text-sm text-gray-500">10-15 mins</span>
+                        </div>
+                        <div class="mt-3 flex items-center justify-between">
+                            <div class="flex items-center text-sm text-pink-600">
+                                <span class="mr-1">🍰</span>
+                                Fresh daily
+                            </div>
+                            <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium add-to-cart" data-restaurant="Sweet Dreams" data-price="200">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Restaurant Card 8 -->
+                <div class="bg-white rounded-xl shadow-md card-hover cursor-pointer">
+                    <div class="h-48 bg-gradient-to-r from-yellow-400 to-red-500 rounded-t-xl overflow-hidden">
+                        <img src="idli.jpg" alt="South Indian" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">South Spice</h3>
+                            <div class="flex items-center bg-green-600 text-white px-2 py-1 rounded text-sm">
+                                <span>4.3 ★</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">South Indian, Dosa, Idli</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">₹180 for two</span>
+                            <span class="text-sm text-gray-500">25-30 mins</span>
+                        </div>
+                        <div class="mt-3 flex items-center justify-between">
+                            <div class="flex items-center text-sm text-yellow-600">
+                                <span class="mr-1">🌶️</span>
+                                Authentic taste
+                            </div>
+                            <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium add-to-cart" data-restaurant="South Spice" data-price="180">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Restaurant Card 9 -->
+                <div class="bg-white rounded-xl shadow-md card-hover cursor-pointer">
+                    <div class="h-48 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-t-xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400&h=300&fit=crop" alt="Coffee" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Cafe Mocha</h3>
+                            <div class="flex items-center bg-green-600 text-white px-2 py-1 rounded text-sm">
+                                <span>4.2 ★</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2">Coffee, Beverages, Snacks</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">₹150 for two</span>
+                            <span class="text-sm text-gray-500">10-15 mins</span>
+                        </div>
+                        <div class="mt-3 flex items-center justify-between">
+                            <div class="flex items-center text-sm text-amber-600">
+                                <span class="mr-1">☕</span>
+                                Fresh brewed
+                            </div>
+                            <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium add-to-cart" data-restaurant="Cafe Mocha" data-price="150">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Download Section -->
+    <section class="py-12 sm:py-16 bg-gradient-to-br from-red-50 to-orange-50">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden">
+                <div class="flex flex-col lg:flex-row">
+                    <!-- Left Content -->
+                    <div class="flex-1 p-6 sm:p-8 md:p-12">
+                        <div class="max-w-lg">
+                            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4">Get the Zomato app</h2>
+                            <p class="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">Download our app for the fastest food delivery experience. Order from 1000+ restaurants with exclusive app-only offers!</p>
+                            
+                            <!-- Features -->
+                            <div class="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+                                <div class="flex items-center">
+                                    <div class="w-6 h-6 sm:w-8 sm:h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="text-gray-700 text-sm sm:text-base">Live order tracking</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-6 h-6 sm:w-8 sm:h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="text-gray-700 text-sm sm:text-base">Exclusive app-only deals</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-6 h-6 sm:w-8 sm:h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="text-gray-700 text-sm sm:text-base">Faster checkout & payments</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Contact Method Selection -->
+                            <div class="mb-4 sm:mb-6">
+                                <p class="text-sm font-medium text-gray-700 mb-3">Send download link via:</p>
+                                <div class="flex gap-4 sm:gap-6">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="contactMethod" value="email" class="mr-2 text-red-600" checked>
+                                        <span class="text-gray-700 text-sm sm:text-base">Email</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="contactMethod" value="phone" class="mr-2 text-red-600">
+                                        <span class="text-gray-700 text-sm sm:text-base">Phone</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Input Form -->
+                            <div class="flex flex-col sm:flex-row gap-3 mb-4 sm:mb-6">
+                                <input type="text" id="appLinkInput" placeholder="Enter your email" class="flex-1 p-3 sm:p-4 border border-gray-300 rounded-xl outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all text-sm sm:text-base">
+                                <button id="shareAppLinkBtn" class="bg-red-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl hover:bg-red-700 transition-colors font-medium whitespace-nowrap text-sm sm:text-base">
+                                    Send Link
+                                </button>
+                            </div>
+                            
+                            <!-- Download Buttons -->
+                            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                                <button class="flex items-center justify-center bg-black text-white px-4 sm:px-6 py-3 rounded-xl hover:bg-gray-800 transition-colors">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                                    </svg>
+                                    <div class="text-left">
+                                        <div class="text-xs">Download on the</div>
+                                        <div class="text-sm font-semibold">App Store</div>
+                                    </div>
+                                </button>
+                                <button class="flex items-center justify-center bg-black text-white px-4 sm:px-6 py-3 rounded-xl hover:bg-gray-800 transition-colors">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                                    </svg>
+                                    <div class="text-left">
+                                        <div class="text-xs">Get it on</div>
+                                        <div class="text-sm font-semibold">Google Play</div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Image -->
+                    <div class="lg:w-80 xl:w-96 bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center p-6 sm:p-8">
+                        <div class="relative">
+                            <!-- Phone mockup -->
+                            <div class="w-48 h-72 sm:w-56 sm:h-84 lg:w-64 lg:h-96 bg-gray-900 rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 shadow-2xl">
+                                <div class="w-full h-full bg-white rounded-xl sm:rounded-2xl overflow-hidden relative">
+                                    <!-- Status bar -->
+                                    <div class="h-5 sm:h-6 bg-gray-100 flex items-center justify-between px-3 sm:px-4 text-xs">
+                                        <span>9:41</span>
+                                        <div class="flex items-center space-x-1">
+                                            <div class="w-3 h-1.5 sm:w-4 sm:h-2 bg-green-500 rounded-sm"></div>
+                                            <div class="w-3 h-1.5 sm:w-4 sm:h-2 bg-green-500 rounded-sm"></div>
+                                            <div class="w-3 h-1.5 sm:w-4 sm:h-2 bg-green-500 rounded-sm"></div>
+                                        </div>
+                                    </div>
+                                    <!-- App content -->
+                                    <div class="p-3 sm:p-4">
+                                        <div class="text-center mb-3 sm:mb-4">
+                                            <div class="text-lg sm:text-xl font-bold text-red-600 mb-1 sm:mb-2">Zomato</div>
+                                            <div class="text-xs sm:text-sm text-gray-600">Order food online</div>
+                                        </div>
+                                        <div class="space-y-2 sm:space-y-3">
+                                            <div class="h-12 sm:h-16 bg-red-50 rounded-lg flex items-center px-2 sm:px-3">
+                                                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-red-200 rounded-full mr-2 sm:mr-3"></div>
+                                                <div class="flex-1">
+                                                    <div class="h-2 sm:h-3 bg-gray-200 rounded mb-1"></div>
+                                                    <div class="h-1.5 sm:h-2 bg-gray-100 rounded w-2/3"></div>
+                                                </div>
+                                            </div>
+                                            <div class="h-12 sm:h-16 bg-orange-50 rounded-lg flex items-center px-2 sm:px-3">
+                                                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-orange-200 rounded-full mr-2 sm:mr-3"></div>
+                                                <div class="flex-1">
+                                                    <div class="h-2 sm:h-3 bg-gray-200 rounded mb-1"></div>
+                                                    <div class="h-1.5 sm:h-2 bg-gray-100 rounded w-2/3"></div>
+                                                </div>
+                                            </div>
+                                            <div class="h-12 sm:h-16 bg-green-50 rounded-lg flex items-center px-2 sm:px-3">
+                                                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-green-200 rounded-full mr-2 sm:mr-3"></div>
+                                                <div class="flex-1">
+                                                    <div class="h-2 sm:h-3 bg-gray-200 rounded mb-1"></div>
+                                                    <div class="h-1.5 sm:h-2 bg-gray-100 rounded w-2/3"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Floating elements -->
+                            <div class="absolute -top-2 -right-2 sm:-top-4 sm:-right-4 w-8 h-8 sm:w-12 sm:h-12 bg-yellow-400 rounded-full flex items-center justify-center text-sm sm:text-xl animate-bounce">
+                                🍕
+                            </div>
+                            <div class="absolute -bottom-2 -left-2 sm:-bottom-4 sm:-left-4 w-6 h-6 sm:w-10 sm:h-10 bg-green-400 rounded-full flex items-center justify-center text-sm sm:text-lg animate-pulse">
+                                🍔
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 sm:py-12">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                <div class="sm:col-span-2 lg:col-span-1">
+                    <div class="text-xl sm:text-2xl font-bold text-red-500 mb-3 sm:mb-4">Zomato</div>
+                    <p class="text-gray-400 text-sm sm:text-base">Discover the best food & drinks in your city</p>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">About Zomato</h3>
+                    <ul class="space-y-2 text-gray-400 text-sm sm:text-base">
+                        <li><a href="#" class="hover:text-white transition-colors">Who We Are</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Work With Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Investor Relations</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">For Foodies</h3>
+                    <ul class="space-y-2 text-gray-400 text-sm sm:text-base">
+                        <li><a href="#" class="hover:text-white transition-colors">Code of Conduct</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Community</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Blogger Help</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Mobile Apps</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">For Restaurants</h3>
+                    <ul class="space-y-2 text-gray-400 text-sm sm:text-base">
+                        <li><a href="#" class="hover:text-white transition-colors">Partner With Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Apps For You</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-gray-400">
+                <p class="text-sm sm:text-base">&copy; 2024 Zomato. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 max-w-md w-full">
+            <div class="flex justify-between items-center mb-4 sm:mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Login</h2>
+                <button id="closeLoginModal" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Email</label>
+                    <input type="email" required class="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-red-500 text-sm sm:text-base" placeholder="Enter your email">
+                </div>
+                <div class="mb-4 sm:mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+                    <input type="password" required class="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-red-500 text-sm sm:text-base" placeholder="Enter your password">
+                </div>
+                <div class="text-right mb-4">
+                    <button type="button" id="forgotPasswordBtn" class="text-red-600 hover:text-red-700 text-sm font-medium">Forgot Password?</button>
+                </div>
+                <button type="submit" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors font-medium text-sm sm:text-base">Login</button>
+                <p class="text-center text-gray-600 mt-4 text-sm sm:text-base">Don't have an account? <button type="button" id="switchToSignUp" class="text-red-600 hover:text-red-700 font-medium">Sign Up</button></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div id="signUpModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Sign Up</h2>
+                <button id="closeSignUpModal" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form id="signUpForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Full Name</label>
+                    <input type="text" required class="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-red-500" placeholder="Enter your full name">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Email</label>
+                    <input type="email" required class="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-red-500" placeholder="Enter your email">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Phone Number</label>
+                    <input type="tel" required class="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-red-500" placeholder="Enter your phone number">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+                    <input type="password" required class="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-red-500" placeholder="Create a password">
+                </div>
+                <div class="mb-6">
+                    <label class="flex items-center">
+                        <input type="checkbox" required class="mr-2">
+                        <span class="text-sm text-gray-600">I agree to the <a href="#" class="text-red-600 hover:text-red-700">Terms & Conditions</a></span>
+                    </label>
+                </div>
+                <button type="submit" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors font-medium">Create Account</button>
+                <p class="text-center text-gray-600 mt-4">Already have an account? <button type="button" id="switchToLogin" class="text-red-600 hover:text-red-700 font-medium">Login</button></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Reset Password</h2>
+                <button id="closeForgotPasswordModal" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <p class="text-gray-600">Enter your email address and we'll send you a link to reset your password.</p>
+            </div>
+            <form id="forgotPasswordForm">
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Email Address</label>
+                    <input type="email" required class="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-red-500" placeholder="Enter your registered email">
+                </div>
+                <button type="submit" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors font-medium mb-4">Send Reset Link</button>
+                <button type="button" id="backToLogin" class="w-full text-gray-600 hover:text-gray-800 font-medium">Back to Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 max-w-lg w-full max-h-[90vh] sm:max-h-96 overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 sm:mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Your Cart</h2>
+                <button id="closeCartModal" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="cartItems" class="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+                <!-- Cart items will be populated here -->
+            </div>
+            <div id="cartTotal" class="border-t pt-4 mb-4 sm:mb-6">
+                <!-- Total will be shown here -->
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="clearCart" class="flex-1 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition-colors font-medium text-sm sm:text-base">Clear Cart</button>
+                <button id="checkoutBtn" class="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors font-medium text-sm sm:text-base">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Payment & Delivery</h2>
+                <button id="closePaymentModal" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-3">Order Summary</h3>
+                <div id="paymentOrderItems" class="space-y-2 mb-3">
+                    <!-- Order items will be populated here -->
+                </div>
+                <div id="paymentOrderTotal" class="border-t pt-3">
+                    <!-- Total breakdown will be shown here -->
+                </div>
+            </div>
+
+            <!-- Delivery Address -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 mb-3">Delivery Address</h3>
+                <div class="space-y-3">
+                    <input type="text" id="deliveryName" placeholder="Full Name" class="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-red-500" required>
+                    <input type="tel" id="deliveryPhone" placeholder="Phone Number" class="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-red-500" required>
+                    <textarea id="deliveryAddress" placeholder="Complete Address (House No, Street, Area, Landmark)" rows="3" class="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-red-500 resize-none" required></textarea>
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 mb-4">Payment Method</h3>
+                <div class="space-y-3">
+                    <!-- Cash on Delivery -->
+                    <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                        <input type="radio" name="paymentMethod" value="cod" class="mr-4 text-red-600" checked>
+                        <div class="flex items-center flex-1">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">Cash on Delivery</div>
+                                <div class="text-sm text-gray-600">Pay when your order arrives</div>
+                            </div>
+                        </div>
+                        <div class="text-green-600 font-medium">FREE</div>
+                    </label>
+
+                    <!-- Online Payment -->
+                    <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                        <input type="radio" name="paymentMethod" value="online" class="mr-4 text-red-600">
+                        <div class="flex items-center flex-1">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">Pay Online</div>
+                                <div class="text-sm text-gray-600">UPI, Cards, Net Banking, Wallets</div>
+                            </div>
+                        </div>
+                        <div class="text-blue-600 font-medium">5% OFF</div>
+                    </label>
+
+                    <!-- UPI -->
+                    <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                        <input type="radio" name="paymentMethod" value="upi" class="mr-4 text-red-600">
+                        <div class="flex items-center flex-1">
+                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">UPI Payment</div>
+                                <div class="text-sm text-gray-600">PhonePe, Google Pay, Paytm, BHIM</div>
+                            </div>
+                        </div>
+                        <div class="text-purple-600 font-medium">INSTANT</div>
+                    </label>
+
+                    <!-- Credit/Debit Card -->
+                    <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                        <input type="radio" name="paymentMethod" value="card" class="mr-4 text-red-600">
+                        <div class="flex items-center flex-1">
+                            <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">Credit/Debit Card</div>
+                                <div class="text-sm text-gray-600">Visa, Mastercard, RuPay, Amex</div>
+                            </div>
+                        </div>
+                        <div class="text-orange-600 font-medium">SECURE</div>
+                    </label>
+
+                    <!-- Net Banking -->
+                    <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                        <input type="radio" name="paymentMethod" value="netbanking" class="mr-4 text-red-600">
+                        <div class="flex items-center flex-1">
+                            <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">Net Banking</div>
+                                <div class="text-sm text-gray-600">All major banks supported</div>
+                            </div>
+                        </div>
+                        <div class="text-indigo-600 font-medium">SAFE</div>
+                    </label>
+
+                    <!-- Wallet -->
+                    <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                        <input type="radio" name="paymentMethod" value="wallet" class="mr-4 text-red-600">
+                        <div class="flex items-center flex-1">
+                            <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-800">Digital Wallet</div>
+                                <div class="text-sm text-gray-600">Paytm, Amazon Pay, Mobikwik</div>
+                            </div>
+                        </div>
+                        <div class="text-pink-600 font-medium">CASHBACK</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="backToCart" class="flex-1 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition-colors font-medium text-sm sm:text-base">Back to Cart</button>
+                <button id="placeOrderBtn" class="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors font-medium text-sm sm:text-base">Place Order</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced search functionality
+        const locationInput = document.getElementById('locationInput');
+        const searchInput = document.getElementById('searchInput');
+        const locationInputDesktop = document.getElementById('locationInputDesktop');
+        const searchInputDesktop = document.getElementById('searchInputDesktop');
+        const locationSuggestions = document.getElementById('locationSuggestions');
+        const searchSuggestions = document.getElementById('searchSuggestions');
+        const locationSuggestionsDesktop = document.getElementById('locationSuggestionsDesktop');
+        const searchSuggestionsDesktop = document.getElementById('searchSuggestionsDesktop');
+        const detectLocationBtn = document.getElementById('detectLocation');
+        const detectLocationDesktop = document.getElementById('detectLocationDesktop');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchBtnDesktop = document.getElementById('searchBtnDesktop');
+
+        // Comprehensive India location database - All states, cities, towns, and areas
+        const locationDatabase = [
+            // Andhra Pradesh - Complete Coverage
+            'Hyderabad, Andhra Pradesh', 'Visakhapatnam, Andhra Pradesh', 'Vijayawada, Andhra Pradesh', 'Guntur, Andhra Pradesh', 'Nellore, Andhra Pradesh', 'Kurnool, Andhra Pradesh', 'Rajahmundry, Andhra Pradesh', 'Tirupati, Andhra Pradesh', 'Kadapa, Andhra Pradesh', 'Anantapur, Andhra Pradesh', 'Eluru, Andhra Pradesh', 'Ongole, Andhra Pradesh', 'Chittoor, Andhra Pradesh', 'Machilipatnam, Andhra Pradesh', 'Adoni, Andhra Pradesh', 'Tenali, Andhra Pradesh', 'Proddatur, Andhra Pradesh', 'Hindupur, Andhra Pradesh', 'Bhimavaram, Andhra Pradesh', 'Madanapalle, Andhra Pradesh', 'Guntakal, Andhra Pradesh', 'Dharmavaram, Andhra Pradesh', 'Gudivada, Andhra Pradesh', 'Narasaraopet, Andhra Pradesh', 'Tadipatri, Andhra Pradesh', 'Mangalagiri, Andhra Pradesh', 'Chilakaluripet, Andhra Pradesh', 'Yemmiganur, Andhra Pradesh',
+            
+            // Arunachal Pradesh - Complete Coverage
+            'Itanagar, Arunachal Pradesh', 'Naharlagun, Arunachal Pradesh', 'Pasighat, Arunachal Pradesh', 'Tezpur, Arunachal Pradesh', 'Bomdila, Arunachal Pradesh', 'Ziro, Arunachal Pradesh', 'Along, Arunachal Pradesh', 'Tezu, Arunachal Pradesh', 'Changlang, Arunachal Pradesh', 'Khonsa, Arunachal Pradesh', 'Roing, Arunachal Pradesh', 'Namsai, Arunachal Pradesh', 'Seppa, Arunachal Pradesh', 'Yingkiong, Arunachal Pradesh', 'Anini, Arunachal Pradesh', 'Hawai, Arunachal Pradesh', 'Daporijo, Arunachal Pradesh', 'Basar, Arunachal Pradesh', 'Koloriang, Arunachal Pradesh', 'Tawang, Arunachal Pradesh',
+            
+            // Assam - Complete Coverage
+            'Guwahati, Assam', 'Silchar, Assam', 'Dibrugarh, Assam', 'Jorhat, Assam', 'Nagaon, Assam', 'Tinsukia, Assam', 'Tezpur, Assam', 'Bongaigaon, Assam', 'Dhubri, Assam', 'Diphu, Assam', 'North Lakhimpur, Assam', 'Karimganj, Assam', 'Sivasagar, Assam', 'Goalpara, Assam', 'Barpeta, Assam', 'Mangaldoi, Assam', 'Haflong, Assam', 'Hailakandi, Assam', 'Morigaon, Assam', 'Nalbari, Assam', 'Rangia, Assam', 'Silapathar, Assam', 'Margherita, Assam', 'Gauripur, Assam', 'Bilasipara, Assam', 'Sarupathar, Assam', 'Kokrajhar, Assam', 'Golaghat, Assam', 'Mariani, Assam', 'Marigaon, Assam',
+            
+            // Bihar - Complete Coverage with All Districts and Major Towns
+            'Patna, Bihar', 'Gaya, Bihar', 'Bhagalpur, Bihar', 'Muzaffarpur, Bihar', 'Purnia, Bihar', 'Darbhanga, Bihar', 'Bihar Sharif, Bihar', 'Arrah, Bihar', 'Begusarai, Bihar', 'Katihar, Bihar', 'Munger, Bihar', 'Chhapra, Bihar', 'Danapur, Bihar', 'Saharsa, Bihar', 'Sasaram, Bihar', 'Hajipur, Bihar', 'Dehri, Bihar', 'Siwan, Bihar', 'Motihari, Bihar', 'Nawada, Bihar', 'Bagaha, Bihar', 'Buxar, Bihar', 'Kishanganj, Bihar', 'Sitamarhi, Bihar', 'Madhubani, Bihar', 'Supaul, Bihar', 'Araria, Bihar', 'Khagaria, Bihar', 'Banka, Bihar', 'Jamui, Bihar', 'Lakhisarai, Bihar', 'Sheikhpura, Bihar', 'Nalanda, Bihar', 'Rohtas, Bihar', 'Kaimur, Bihar', 'West Champaran, Bihar', 'East Champaran, Bihar', 'Gopalganj, Bihar', 'Saran, Bihar', 'Vaishali, Bihar', 'Samastipur, Bihar', 'Madhepura, Bihar', 'Jehanabad, Bihar',
+            
+            // Aurangabad, Bihar - Complete Areas & Localities
+            'Aurangabad, Bihar', 'Aurangabad City, Bihar', 'Aurangabad Sadar, Bihar', 'Aurangabad Station, Bihar', 'Aurangabad Bazaar, Bihar', 'Aurangabad Civil Lines, Bihar', 'Aurangabad Cantonment, Bihar', 'Aurangabad Old City, Bihar', 'Aurangabad New Area, Bihar', 'Aurangabad Market, Bihar', 'Aurangabad Railway Colony, Bihar', 'Aurangabad Hospital Road, Bihar', 'Aurangabad College Road, Bihar', 'Aurangabad Bus Stand, Bihar', 'Aurangabad Court Area, Bihar', 'Aurangabad Industrial Area, Bihar', 'Aurangabad Bypass, Bihar', 'Aurangabad Chowk, Bihar', 'Aurangabad Thana, Bihar', 'Aurangabad Block, Bihar',
+            
+            // More Bihar Cities & Areas - Extended
+            'Forbesganj, Bihar', 'Raxaul, Bihar', 'Betiah, Bihar', 'Bettiah, Bihar', 'Chapra, Bihar', 'Revelganj, Bihar', 'Marhaura, Bihar', 'Ekma, Bihar', 'Lauriya, Bihar', 'Narkatiaganj, Bihar', 'Bagaha, Bihar', 'Chanpatia, Bihar', 'Gaunaha, Bihar', 'Mainatanr, Bihar', 'Ramnagar, Bihar', 'Sugauli, Bihar', 'Kesaria, Bihar', 'Kalyanpur, Bihar', 'Turkaulia, Bihar', 'Dhaka, Bihar', 'Areraj, Bihar', 'Jainagar, Bihar', 'Benipatti, Bihar', 'Khajauli, Bihar', 'Babubarhi, Bihar', 'Basopatti, Bihar', 'Ghoghardiha, Bihar', 'Jhanjharpur, Bihar', 'Katihar, Bihar', 'Korha, Bihar', 'Manihari, Bihar', 'Barari, Bihar', 'Dandkhora, Bihar', 'Hasanganj, Bihar', 'Azamnagar, Bihar', 'Balrampur, Bihar', 'Banmankhi, Bihar', 'Bhawanipur, Bihar', 'Dagarua, Bihar', 'Falka, Bihar', 'Jogbani, Bihar', 'Kasba, Bihar', 'Narpatganj, Bihar', 'Pothia, Bihar', 'Raniganj, Bihar', 'Simri Bakhtiarpur, Bihar', 'Thakurganj, Bihar',
+            
+            // Patna Areas - Extended
+            'Boring Road, Patna', 'Fraser Road, Patna', 'Exhibition Road, Patna', 'Bailey Road, Patna', 'Kankarbagh, Patna', 'Rajendra Nagar, Patna', 'Patliputra, Patna', 'Danapur Cantonment, Patna', 'Phulwari Sharif, Patna', 'Digha, Patna', 'Patrakar Nagar, Patna', 'Anisabad, Patna', 'Kumhrar, Patna', 'Gardanibagh, Patna', 'Bankipore, Patna', 'Mithapur, Patna', 'Kadamkuan, Patna', 'Ashok Nagar, Patna', 'Buddha Colony, Patna', 'Shastri Nagar, Patna', 'Hanuman Nagar, Patna', 'Keshri Nagar, Patna', 'Lohanipur, Patna', 'Rukanpura, Patna', 'Saguna More, Patna', 'Dak Bungalow, Patna', 'Gulzarbagh, Patna', 'Mahendru, Patna', 'Pahari, Patna', 'Patna City, Patna', 'Chowk, Patna', 'Patna Junction, Patna', 'New Capital, Patna', 'Beur, Patna', 'Khemnichak, Patna', 'Kurji, Patna', 'Alamganj, Patna', 'Bakarganj, Patna', 'Fatuha, Patna', 'Khusrupur, Patna', 'Maner, Patna', 'Naubatpur, Patna', 'Punpun, Patna', 'Sampatchak, Patna',
+            
+            // Gaya Areas - Extended
+            'Gaya Station, Bihar', 'Bodh Gaya, Bihar', 'Manpur, Gaya', 'Sherghati, Gaya', 'Tikari, Gaya', 'Barachatti, Gaya', 'Mohanpur, Gaya', 'Banke Bazaar, Gaya', 'Rampur, Gaya', 'Dobhi, Gaya', 'Atri, Gaya', 'Belaganj, Gaya', 'Dumaria, Gaya', 'Gurua, Gaya', 'Khizersarai, Gaya', 'Konch, Gaya', 'Nebua, Gaya', 'Paraiya, Gaya', 'Tan Kuppa, Gaya', 'Wazirganj, Gaya', 'Imamganj, Gaya', 'Amas, Gaya', 'Bodhgaya, Gaya', 'Fatehpur, Gaya', 'Neem Chak Bathani, Gaya', 'Tekari, Gaya',
+            
+            // Muzaffarpur Areas - Extended
+            'Muzaffarpur Station, Bihar', 'Mithanpura, Muzaffarpur', 'Brahmpura, Muzaffarpur', 'Juran Chapra, Muzaffarpur', 'Ahiyapur, Muzaffarpur', 'Kanti, Muzaffarpur', 'Sakra, Muzaffarpur', 'Minapur, Muzaffarpur', 'Aurai, Muzaffarpur', 'Bochaha, Muzaffarpur', 'Gaighat, Muzaffarpur', 'Katra, Muzaffarpur', 'Kurhani, Muzaffarpur', 'Marwan, Muzaffarpur', 'Meenapur, Muzaffarpur', 'Motipur, Muzaffarpur', 'Mushahari, Muzaffarpur', 'Paroo, Muzaffarpur', 'Saraiya, Muzaffarpur', 'Sitamarhi, Muzaffarpur',
+            
+            // Chhattisgarh - Complete Coverage
+            'Raipur, Chhattisgarh', 'Bhilai, Chhattisgarh', 'Bilaspur, Chhattisgarh', 'Korba, Chhattisgarh', 'Durg, Chhattisgarh', 'Rajnandgaon, Chhattisgarh', 'Jagdalpur, Chhattisgarh', 'Raigarh, Chhattisgarh', 'Ambikapur, Chhattisgarh', 'Mahasamund, Chhattisgarh', 'Dhamtari, Chhattisgarh', 'Chirmiri, Chhattisgarh', 'Jashpur, Chhattisgarh', 'Kanker, Chhattisgarh', 'Kawardha, Chhattisgarh', 'Kondagaon, Chhattisgarh', 'Koriya, Chhattisgarh', 'Janjgir, Chhattisgarh', 'Champa, Chhattisgarh', 'Narayanpur, Chhattisgarh', 'Bastar, Chhattisgarh', 'Bijapur, Chhattisgarh', 'Sukma, Chhattisgarh', 'Dantewada, Chhattisgarh', 'Gariaband, Chhattisgarh', 'Balod, Chhattisgarh', 'Bemetara, Chhattisgarh', 'Baloda Bazar, Chhattisgarh', 'Mungeli, Chhattisgarh', 'Surajpur, Chhattisgarh', 'Balrampur, Chhattisgarh', 'Gaurela, Chhattisgarh', 'Pendra, Chhattisgarh', 'Manendragarh, Chhattisgarh', 'Chhuikhadan, Chhattisgarh', 'Khairagarh, Chhattisgarh', 'Chhuikhadan, Chhattisgarh', 'Mohla, Chhattisgarh', 'Manpur, Chhattisgarh',
+            
+            // Delhi - Complete Coverage with All Areas
+            'New Delhi, Delhi', 'Delhi, India', 'Connaught Place, Delhi', 'Karol Bagh, Delhi', 'Lajpat Nagar, Delhi', 'Saket, Delhi', 'Dwarka, Delhi', 'Rohini, Delhi', 'Janakpuri, Delhi', 'Vasant Kunj, Delhi', 'Greater Kailash, Delhi', 'Nehru Place, Delhi', 'Chandni Chowk, Delhi', 'Rajouri Garden, Delhi', 'Laxmi Nagar, Delhi', 'Pitampura, Delhi', 'Mayur Vihar, Delhi', 'Preet Vihar, Delhi', 'Tilak Nagar, Delhi', 'Vikaspuri, Delhi', 'Paschim Vihar, Delhi', 'Uttam Nagar, Delhi', 'Punjabi Bagh, Delhi', 'Kirti Nagar, Delhi', 'Moti Nagar, Delhi', 'Ramesh Nagar, Delhi', 'Subhash Nagar, Delhi', 'Tagore Garden, Delhi', 'Hari Nagar, Delhi', 'Najafgarh, Delhi', 'Dwarka Sector 1, Delhi', 'Dwarka Sector 2, Delhi', 'Dwarka Sector 3, Delhi', 'Dwarka Sector 4, Delhi', 'Dwarka Sector 5, Delhi', 'Dwarka Sector 6, Delhi', 'Dwarka Sector 7, Delhi', 'Dwarka Sector 8, Delhi', 'Dwarka Sector 9, Delhi', 'Dwarka Sector 10, Delhi', 'Dwarka Sector 11, Delhi', 'Dwarka Sector 12, Delhi', 'Dwarka Sector 13, Delhi', 'Dwarka Sector 14, Delhi', 'Dwarka Sector 15, Delhi', 'Dwarka Sector 16, Delhi', 'Dwarka Sector 17, Delhi', 'Dwarka Sector 18, Delhi', 'Dwarka Sector 19, Delhi', 'Dwarka Sector 20, Delhi', 'Dwarka Sector 21, Delhi', 'Dwarka Sector 22, Delhi', 'Dwarka Sector 23, Delhi', 'Rohini Sector 1, Delhi', 'Rohini Sector 2, Delhi', 'Rohini Sector 3, Delhi', 'Rohini Sector 4, Delhi', 'Rohini Sector 5, Delhi', 'Rohini Sector 6, Delhi', 'Rohini Sector 7, Delhi', 'Rohini Sector 8, Delhi', 'Rohini Sector 9, Delhi', 'Rohini Sector 10, Delhi', 'Rohini Sector 11, Delhi', 'Rohini Sector 12, Delhi', 'Rohini Sector 13, Delhi', 'Rohini Sector 14, Delhi', 'Rohini Sector 15, Delhi', 'Rohini Sector 16, Delhi', 'Rohini Sector 17, Delhi', 'Rohini Sector 18, Delhi', 'Rohini Sector 19, Delhi', 'Rohini Sector 20, Delhi', 'Rohini Sector 21, Delhi', 'Rohini Sector 22, Delhi', 'Rohini Sector 23, Delhi', 'Rohini Sector 24, Delhi', 'Rohini Sector 25, Delhi', 'Shalimar Bagh, Delhi', 'Azadpur, Delhi', 'Model Town, Delhi', 'Civil Lines, Delhi', 'Kamla Nagar, Delhi', 'Mukherjee Nagar, Delhi', 'Shakti Nagar, Delhi', 'Timarpur, Delhi', 'Burari, Delhi', 'Narela, Delhi', 'Bawana, Delhi', 'Alipur, Delhi', 'Kanjhawala, Delhi', 'Mundka, Delhi', 'Nangloi, Delhi', 'Kirari Suleman Nagar, Delhi', 'Sultanpur Majra, Delhi', 'Rithala, Delhi', 'Begumpur, Delhi', 'Peeragarhi, Delhi', 'Mangolpuri, Delhi', 'Sultanpuri, Delhi', 'Ashok Vihar, Delhi', 'Wazirpur, Delhi', 'Adarsh Nagar, Delhi', 'Jahangirpuri, Delhi', 'Bhalswa, Delhi', 'Samaypur Badli, Delhi', 'Holambi Kalan, Delhi', 'Kohat Enclave, Delhi', 'Sunder Vihar, Delhi', 'Deepali, Delhi', 'Maurya Enclave, Delhi', 'Tri Nagar, Delhi', 'Inderlok, Delhi', 'Shastri Park, Delhi', 'Seelampur, Delhi', 'Shahdara, Delhi', 'Dilshad Garden, Delhi', 'Jhilmil, Delhi', 'Mansarovar Park, Delhi', 'Shakarpur, Delhi', 'Krishna Nagar, Delhi', 'East Azad Nagar, Delhi', 'Geeta Colony, Delhi', 'Vishwas Nagar, Delhi', 'Anand Vihar, Delhi', 'Karkardooma, Delhi', 'Patparganj, Delhi', 'Pandav Nagar, Delhi', 'IP Extension, Delhi', 'Kalyanpuri, Delhi', 'Mayur Vihar Phase 1, Delhi', 'Mayur Vihar Phase 2, Delhi', 'Mayur Vihar Phase 3, Delhi', 'Vasundhara Enclave, Delhi', 'Kondli, Delhi', 'Gharoli, Delhi', 'Gazipur, Delhi', 'Khichripur, Delhi', 'New Ashok Nagar, Delhi', 'Noida Link Road, Delhi', 'Akshardham, Delhi', 'Yamuna Vihar, Delhi', 'Bhajanpura, Delhi', 'Wazirabad, Delhi', 'Karawal Nagar, Delhi', 'Gokulpuri, Delhi', 'Jyoti Nagar, Delhi', 'Nand Nagri, Delhi', 'Harsh Vihar, Delhi', 'Sabhapur, Delhi', 'Shiv Vihar, Delhi', 'Chand Bagh, Delhi', 'Maujpur, Delhi', 'Jaffrabad, Delhi', 'Sonia Vihar, Delhi', 'Tahirpur, Delhi', 'Daryaganj, Delhi', 'Jama Masjid, Delhi', 'Red Fort, Delhi', 'Kashmere Gate, Delhi', 'Tis Hazari, Delhi', 'Sadar Bazaar, Delhi', 'Paharganj, Delhi', 'Ajmeri Gate, Delhi', 'New Delhi Railway Station, Delhi', 'Rajiv Chowk, Delhi', 'Barakhamba Road, Delhi', 'Mandi House, Delhi', 'ITO, Delhi', 'Pragati Maidan, Delhi', 'Indraprastha, Delhi', 'Nizamuddin, Delhi', 'Humayun Tomb, Delhi', 'Khan Market, Delhi', 'Lodhi Road, Delhi', 'Jor Bagh, Delhi', 'Race Course, Delhi', 'Safdarjung, Delhi', 'All India Institute, Delhi', 'Green Park, Delhi', 'Hauz Khas, Delhi', 'IIT Delhi, Delhi', 'Munirka, Delhi', 'RK Puram, Delhi', 'Vasant Vihar, Delhi', 'Chanakyapuri, Delhi', 'Diplomatic Enclave, Delhi', 'Dhaula Kuan, Delhi', 'Delhi Cantonment, Delhi', 'Palam, Delhi', 'IGI Airport, Delhi', 'Mahipalpur, Delhi', 'Kapashera, Delhi', 'Bijwasan, Delhi', 'Pankha Road, Delhi', 'Uttam Nagar East, Delhi', 'Uttam Nagar West, Delhi', 'Nawada, Delhi', 'Kakrola, Delhi', 'Dabri, Delhi', 'Palam Colony, Delhi', 'Sadh Nagar, Delhi', 'Mohan Garden, Delhi', 'Janak Park, Delhi', 'Hari Nagar Extension, Delhi', 'Chhawla, Delhi', 'Dwarka More, Delhi', 'Sector 1 Dwarka, Delhi', 'Sector 2 Dwarka, Delhi', 'Sector 3 Dwarka, Delhi', 'Sector 4 Dwarka, Delhi', 'Sector 5 Dwarka, Delhi', 'Sector 6 Dwarka, Delhi', 'Sector 7 Dwarka, Delhi', 'Sector 8 Dwarka, Delhi', 'Sector 9 Dwarka, Delhi', 'Sector 10 Dwarka, Delhi', 'Sector 11 Dwarka, Delhi', 'Sector 12 Dwarka, Delhi', 'Sector 13 Dwarka, Delhi', 'Sector 14 Dwarka, Delhi', 'Sector 15 Dwarka, Delhi', 'Sector 16 Dwarka, Delhi', 'Sector 17 Dwarka, Delhi', 'Sector 18 Dwarka, Delhi', 'Sector 19 Dwarka, Delhi', 'Sector 20 Dwarka, Delhi', 'Sector 21 Dwarka, Delhi', 'Sector 22 Dwarka, Delhi', 'Sector 23 Dwarka, Delhi', 'Lajpat Nagar 1, Delhi', 'Lajpat Nagar 2, Delhi', 'Lajpat Nagar 3, Delhi', 'Lajpat Nagar 4, Delhi', 'Amar Colony, Delhi', 'Lala Lajpat Rai Market, Delhi', 'Ring Road, Delhi', 'Moolchand, Delhi', 'Defence Colony, Delhi', 'Lodi Colony, Delhi', 'Nizamuddin East, Delhi', 'Nizamuddin West, Delhi', 'Jangpura, Delhi', 'Bhogal, Delhi', 'Jaitpur, Delhi', 'Badarpur, Delhi', 'Faridabad Border, Delhi', 'Tughlakabad, Delhi', 'Kalkaji, Delhi', 'Govindpuri, Delhi', 'Okhla, Delhi', 'Jamia Nagar, Delhi', 'Batla House, Delhi', 'Zakir Nagar, Delhi', 'Johri Pur, Delhi', 'Abul Fazal, Delhi', 'Shaheen Bagh, Delhi', 'Jasola, Delhi', 'Apollo Hospital, Delhi', 'Sarita Vihar, Delhi', 'Pocket A Sarita Vihar, Delhi', 'Pocket B Sarita Vihar, Delhi', 'Pocket C Sarita Vihar, Delhi', 'Pocket D Sarita Vihar, Delhi', 'Mathura Road, Delhi', 'Ashram, Delhi', 'Lajpat Nagar Metro, Delhi', 'Jangpura Extension, Delhi', 'Sukhdev Vihar, Delhi', 'New Friends Colony, Delhi', 'Friends Colony, Delhi', 'Maharani Bagh, Delhi', 'Jamia Millia, Delhi', 'Okhla Industrial Area, Delhi', 'Okhla Phase 1, Delhi', 'Okhla Phase 2, Delhi', 'Okhla Phase 3, Delhi', 'Kalkaji Extension, Delhi', 'CR Park, Delhi', 'Greater Kailash 1, Delhi', 'Greater Kailash 2, Delhi', 'East of Kailash, Delhi', 'Kailash Colony, Delhi', 'Nehru Enclave, Delhi', 'Kotla Mubarakpur, Delhi', 'Panchsheel Park, Delhi', 'Panchsheel Enclave, Delhi', 'Malviya Nagar, Delhi', 'Hauz Khas Enclave, Delhi', 'Gulmohar Park, Delhi', 'Yusuf Sarai, Delhi', 'Green Park Extension, Delhi', 'Kalu Sarai, Delhi', 'Sarvodaya Enclave, Delhi', 'Shahpur Jat, Delhi', 'Siri Fort, Delhi', 'Press Enclave, Delhi', 'Saket Metro, Delhi', 'Select City Walk, Delhi', 'DLF Phase 1, Delhi', 'DLF Phase 2, Delhi', 'DLF Phase 3, Delhi', 'DLF Phase 4, Delhi', 'Qutub Minar, Delhi', 'Mehrauli, Delhi', 'Lado Sarai, Delhi', 'Andheria More, Delhi', 'Chattarpur, Delhi', 'Fatehpur Beri, Delhi', 'Asola, Delhi', 'Deramandi, Delhi', 'Pushp Vihar, Delhi', 'Sector 1 Pushp Vihar, Delhi', 'Sector 2 Pushp Vihar, Delhi', 'Sector 3 Pushp Vihar, Delhi', 'Sector 4 Pushp Vihar, Delhi', 'Sector 5 Pushp Vihar, Delhi', 'Sector 6 Pushp Vihar, Delhi', 'Sector 7 Pushp Vihar, Delhi', 'Sector 8 Pushp Vihar, Delhi', 'Ambedkar Nagar, Delhi', 'Tigri, Delhi', 'Sangam Vihar, Delhi', 'Devli, Delhi', 'Khanpur, Delhi', 'Madangir, Delhi', 'Arjan Garh, Delhi', 'Ghitorni, Delhi', 'Sultan Pur, Delhi', 'Dera Mandi, Delhi', 'Mahipalpur Extension, Delhi', 'Rangpuri, Delhi', 'Vasant Gaon, Delhi', 'Munirka Village, Delhi', 'JNU, Delhi', 'AIIMS, Delhi', 'Safdarjung Hospital, Delhi', 'Katwaria Sarai, Delhi', 'Adhchini, Delhi', 'Khel Gaon, Delhi', 'Siri Fort Auditorium, Delhi', 'August Kranti Marg, Delhi', 'Bhikaji Cama Place, Delhi', 'Shanti Path, Delhi', 'Akbar Road, Delhi', 'APJ Abdul Kalam Road, Delhi', 'Rajpath, Delhi', 'India Gate, Delhi', 'Teen Murti, Delhi', 'Rashtrapati Bhavan, Delhi', 'Parliament House, Delhi', 'North Block, Delhi', 'South Block, Delhi', 'Secretariat, Delhi', 'Udyog Bhavan, Delhi', 'Shastri Bhavan, Delhi', 'Krishi Bhavan, Delhi', 'Rail Bhavan, Delhi', 'Nirman Bhavan, Delhi', 'Vigyan Bhavan, Delhi', 'Hyderabad House, Delhi', 'Patiala House, Delhi', 'Supreme Court, Delhi', 'High Court, Delhi', 'Tis Hazari Court, Delhi', 'Karkardooma Court, Delhi', 'Rohini Court, Delhi', 'Dwarka Court, Delhi', 'Saket Court, Delhi', 'Patiala House Court, Delhi',
+            
+            // Goa - Complete Coverage
+            'Panaji, Goa', 'Vasco da Gama, Goa', 'Margao, Goa', 'Mapusa, Goa', 'Ponda, Goa', 'Bicholim, Goa', 'Curchorem, Goa', 'Sanquelim, Goa', 'Cuncolim, Goa', 'Quepem, Goa', 'Candolim, Goa', 'Calangute, Goa', 'Baga, Goa', 'Anjuna, Goa', 'Arambol, Goa', 'Morjim, Goa', 'Mandrem, Goa', 'Ashvem, Goa', 'Vagator, Goa', 'Chapora, Goa', 'Siolim, Goa', 'Assagao, Goa', 'Saligao, Goa', 'Porvorim, Goa', 'Aldona, Goa', 'Reis Magos, Goa', 'Nerul, Goa', 'Bambolim, Goa', 'Dona Paula, Goa', 'Miramar, Goa', 'Caranzalem, Goa', 'Taleigao, Goa', 'St. Cruz, Goa', 'St. Inez, Goa', 'Fontainhas, Goa', 'Altinho, Goa', 'Campal, Goa', 'Ribandar, Goa', 'Old Goa, Goa', 'Pilar, Goa', 'Goa Velha, Goa', 'Cortalim, Goa', 'Dabolim, Goa', 'Chicalim, Goa', 'Bogmalo, Goa', 'Cansaulim, Goa', 'Arossim, Goa', 'Utorda, Goa', 'Majorda, Goa', 'Betalbatim, Goa', 'Colva, Goa', 'Benaulim, Goa', 'Varca, Goa', 'Cavelossim, Goa', 'Mobor, Goa', 'Betul, Goa', 'Cabo de Rama, Goa', 'Agonda, Goa', 'Palolem, Goa', 'Patnem, Goa', 'Rajbag, Goa', 'Talpona, Goa', 'Galgibaga, Goa', 'Polem, Goa', 'Canacona, Goa', 'Chaudi, Goa', 'Loliem, Goa', 'Cotigao, Goa', 'Partagal, Goa', 'Zambaulim, Goa', 'Chandor, Goa', 'Curtorim, Goa', 'Raia, Goa', 'Nuvem, Goa', 'Rachol, Goa', 'Loutolim, Goa', 'Chinchinim, Goa', 'Balli, Goa', 'Navelim, Goa', 'Dramapur, Goa', 'Assolna, Goa', 'Velim, Goa', 'Ambelim, Goa', 'Betul, Goa', 'Mollem, Goa', 'Colem, Goa', 'Sanguem, Goa', 'Rivona, Goa', 'Netravali, Goa', 'Usgao, Goa', 'Ponda City, Goa', 'Farmagudi, Goa', 'Kundaim, Goa', 'Tisk, Goa', 'Curti, Goa', 'Marcela, Goa', 'Shiroda, Goa', 'Mardol, Goa', 'Priol, Goa', 'Bandora, Goa', 'Borim, Goa', 'Queula, Goa', 'Khandepar, Goa', 'Dharbandora, Goa', 'Valpoi, Goa', 'Sattari, Goa', 'Mayem, Goa', 'Bicholim City, Goa', 'Pale, Goa', 'Latambarcem, Goa', 'Lamgao, Goa', 'Navelim, Goa', 'Sanvordem, Goa', 'Curchorem City, Goa', 'Amona, Goa', 'Xeldem, Goa', 'Sirigao, Goa', 'Balli, Goa', 'Sanquelim City, Goa', 'Bicholim, Goa', 'Mayurbhanj, Goa', 'Pernem, Goa', 'Tiracol, Goa', 'Querim, Goa', 'Keri, Goa', 'Paliem, Goa', 'Ibrampur, Goa', 'Alorna, Goa', 'Chopdem, Goa', 'Parcem, Goa', 'Mandrem, Goa', 'Agarwada, Goa',
+            
+            // Gujarat
+            'Ahmedabad, Gujarat', 'Surat, Gujarat', 'Vadodara, Gujarat', 'Rajkot, Gujarat', 'Bhavnagar, Gujarat', 'Jamnagar, Gujarat', 'Junagadh, Gujarat', 'Gandhinagar, Gujarat', 'Anand, Gujarat', 'Navsari, Gujarat', 'Morbi, Gujarat', 'Nadiad, Gujarat', 'Surendranagar, Gujarat', 'Bharuch, Gujarat', 'Mehsana, Gujarat', 'Bhuj, Gujarat', 'Porbandar, Gujarat', 'Palanpur, Gujarat', 'Vapi, Gujarat', 'Godhra, Gujarat',
+            
+            // Haryana
+            'Gurgaon, Haryana', 'Faridabad, Haryana', 'Panipat, Haryana', 'Ambala, Haryana', 'Yamunanagar, Haryana', 'Rohtak, Haryana', 'Hisar, Haryana', 'Karnal, Haryana', 'Sonipat, Haryana', 'Panchkula, Haryana', 'Bhiwani, Haryana', 'Sirsa, Haryana', 'Bahadurgarh, Haryana', 'Jind, Haryana', 'Thanesar, Haryana', 'Kaithal, Haryana', 'Rewari, Haryana', 'Narnaul, Haryana',
+            
+            // Himachal Pradesh
+            'Shimla, Himachal Pradesh', 'Manali, Himachal Pradesh', 'Dharamshala, Himachal Pradesh', 'Solan, Himachal Pradesh', 'Mandi, Himachal Pradesh', 'Palampur, Himachal Pradesh', 'Baddi, Himachal Pradesh', 'Nahan, Himachal Pradesh', 'Una, Himachal Pradesh', 'Kullu, Himachal Pradesh', 'Hamirpur, Himachal Pradesh', 'Bilaspur, Himachal Pradesh', 'Chamba, Himachal Pradesh', 'Dalhousie, Himachal Pradesh', 'Kasauli, Himachal Pradesh',
+            
+            // Jharkhand
+            'Ranchi, Jharkhand', 'Jamshedpur, Jharkhand', 'Dhanbad, Jharkhand', 'Bokaro, Jharkhand', 'Deoghar, Jharkhand', 'Phusro, Jharkhand', 'Hazaribagh, Jharkhand', 'Giridih, Jharkhand', 'Ramgarh, Jharkhand', 'Medininagar, Jharkhand', 'Chirkunda, Jharkhand', 'Chaibasa, Jharkhand', 'Dumka, Jharkhand', 'Sahibganj, Jharkhand', 'Jhumri Telaiya, Jharkhand',
+            
+            // Karnataka
+            'Bangalore, Karnataka', 'Mysore, Karnataka', 'Hubli, Karnataka', 'Mangalore, Karnataka', 'Belgaum, Karnataka', 'Gulbarga, Karnataka', 'Davanagere, Karnataka', 'Bellary, Karnataka', 'Bijapur, Karnataka', 'Shimoga, Karnataka', 'Tumkur, Karnataka', 'Raichur, Karnataka', 'Bidar, Karnataka', 'Hospet, Karnataka', 'Hassan, Karnataka', 'Gadag, Karnataka', 'Udupi, Karnataka', 'Bagalkot, Karnataka', 'Chitradurga, Karnataka', 'Mandya, Karnataka',
+            'Koramangala, Bangalore', 'Indiranagar, Bangalore', 'Whitefield, Bangalore', 'Electronic City, Bangalore', 'HSR Layout, Bangalore', 'BTM Layout, Bangalore', 'Jayanagar, Bangalore', 'Marathahalli, Bangalore', 'Yelahanka, Bangalore', 'Sarjapur, Bangalore', 'Banashankari, Bangalore', 'Rajajinagar, Bangalore', 'Malleshwaram, Bangalore', 'Basavanagudi, Bangalore', 'JP Nagar, Bangalore',
+            
+            // Kerala
+            'Kochi, Kerala', 'Thiruvananthapuram, Kerala', 'Kozhikode, Kerala', 'Thrissur, Kerala', 'Kollam, Kerala', 'Palakkad, Kerala', 'Alappuzha, Kerala', 'Malappuram, Kerala', 'Kannur, Kerala', 'Kasaragod, Kerala', 'Pathanamthitta, Kerala', 'Idukki, Kerala', 'Ernakulam, Kerala', 'Wayanad, Kerala', 'Kottayam, Kerala', 'Munnar, Kerala', 'Varkala, Kerala', 'Kumarakom, Kerala', 'Thekkady, Kerala', 'Kovalam, Kerala',
+            
+            // Madhya Pradesh
+            'Bhopal, Madhya Pradesh', 'Indore, Madhya Pradesh', 'Gwalior, Madhya Pradesh', 'Jabalpur, Madhya Pradesh', 'Ujjain, Madhya Pradesh', 'Sagar, Madhya Pradesh', 'Dewas, Madhya Pradesh', 'Satna, Madhya Pradesh', 'Ratlam, Madhya Pradesh', 'Rewa, Madhya Pradesh', 'Murwara, Madhya Pradesh', 'Singrauli, Madhya Pradesh', 'Burhanpur, Madhya Pradesh', 'Khandwa, Madhya Pradesh', 'Bhind, Madhya Pradesh', 'Chhindwara, Madhya Pradesh', 'Guna, Madhya Pradesh', 'Shivpuri, Madhya Pradesh', 'Vidisha, Madhya Pradesh', 'Chhatarpur, Madhya Pradesh',
+            
+            // Maharashtra
+            'Mumbai, Maharashtra', 'Pune, Maharashtra', 'Nagpur, Maharashtra', 'Thane, Maharashtra', 'Nashik, Maharashtra', 'Aurangabad, Maharashtra', 'Solapur, Maharashtra', 'Amravati, Maharashtra', 'Kolhapur, Maharashtra', 'Sangli, Maharashtra', 'Malegaon, Maharashtra', 'Akola, Maharashtra', 'Latur, Maharashtra', 'Dhule, Maharashtra', 'Ahmednagar, Maharashtra', 'Chandrapur, Maharashtra', 'Parbhani, Maharashtra', 'Jalgaon, Maharashtra', 'Bhusawal, Maharashtra', 'Nanded, Maharashtra',
+            'Andheri, Mumbai', 'Bandra, Mumbai', 'Juhu, Mumbai', 'Powai, Mumbai', 'Borivali, Mumbai', 'Malad, Mumbai', 'Goregaon, Mumbai', 'Vashi, Mumbai', 'Worli, Mumbai', 'Dadar, Mumbai', 'Kurla, Mumbai', 'Vikhroli, Mumbai', 'Mulund, Mumbai', 'Ghatkopar, Mumbai', 'Chembur, Mumbai',
+            'Hinjewadi, Pune', 'Kothrud, Pune', 'Wakad, Pune', 'Baner, Pune', 'Aundh, Pune', 'Viman Nagar, Pune', 'Hadapsar, Pune', 'Magarpatta, Pune', 'Kalyani Nagar, Pune', 'Camp, Pune', 'Shivaji Nagar, Pune', 'Deccan, Pune', 'Koregaon Park, Pune', 'Pimpri, Pune', 'Chinchwad, Pune',
+            
+            // Manipur
+            'Imphal, Manipur', 'Thoubal, Manipur', 'Bishnupur, Manipur', 'Churachandpur, Manipur', 'Ukhrul, Manipur', 'Senapati, Manipur', 'Tamenglong, Manipur', 'Chandel, Manipur', 'Jiribam, Manipur',
+            
+            // Meghalaya
+            'Shillong, Meghalaya', 'Tura, Meghalaya', 'Cherrapunji, Meghalaya', 'Jowai, Meghalaya', 'Baghmara, Meghalaya', 'Williamnagar, Meghalaya', 'Nongpoh, Meghalaya', 'Mawkyrwat, Meghalaya',
+            
+            // Mizoram
+            'Aizawl, Mizoram', 'Lunglei, Mizoram', 'Saiha, Mizoram', 'Champhai, Mizoram', 'Kolasib, Mizoram', 'Serchhip, Mizoram', 'Mamit, Mizoram', 'Lawngtlai, Mizoram',
+            
+            // Nagaland
+            'Kohima, Nagaland', 'Dimapur, Nagaland', 'Mokokchung, Nagaland', 'Tuensang, Nagaland', 'Wokha, Nagaland', 'Zunheboto, Nagaland', 'Phek, Nagaland', 'Kiphire, Nagaland', 'Longleng, Nagaland', 'Peren, Nagaland', 'Mon, Nagaland',
+            
+            // Odisha
+            'Bhubaneswar, Odisha', 'Cuttack, Odisha', 'Rourkela, Odisha', 'Berhampur, Odisha', 'Sambalpur, Odisha', 'Puri, Odisha', 'Balasore, Odisha', 'Bhadrak, Odisha', 'Baripada, Odisha', 'Jharsuguda, Odisha', 'Jeypore, Odisha', 'Barbil, Odisha', 'Khordha, Odisha', 'Sundargarh, Odisha', 'Rayagada, Odisha',
+            
+            // Punjab
+            'Chandigarh, Punjab', 'Ludhiana, Punjab', 'Amritsar, Punjab', 'Jalandhar, Punjab', 'Patiala, Punjab', 'Bathinda, Punjab', 'Mohali, Punjab', 'Firozpur, Punjab', 'Batala, Punjab', 'Pathankot, Punjab', 'Moga, Punjab', 'Abohar, Punjab', 'Malerkotla, Punjab', 'Khanna, Punjab', 'Phagwara, Punjab', 'Muktsar, Punjab', 'Barnala, Punjab', 'Rajpura, Punjab', 'Hoshiarpur, Punjab', 'Kapurthala, Punjab',
+            
+            // Rajasthan
+            'Jaipur, Rajasthan', 'Jodhpur, Rajasthan', 'Kota, Rajasthan', 'Bikaner, Rajasthan', 'Ajmer, Rajasthan', 'Udaipur, Rajasthan', 'Bhilwara, Rajasthan', 'Alwar, Rajasthan', 'Bharatpur, Rajasthan', 'Sikar, Rajasthan', 'Pali, Rajasthan', 'Sri Ganganagar, Rajasthan', 'Kishangarh, Rajasthan', 'Baran, Rajasthan', 'Dhaulpur, Rajasthan', 'Tonk, Rajasthan', 'Beawar, Rajasthan', 'Hanumangarh, Rajasthan', 'Pushkar, Rajasthan', 'Mount Abu, Rajasthan',
+            
+            // Sikkim
+            'Gangtok, Sikkim', 'Namchi, Sikkim', 'Geyzing, Sikkim', 'Mangan, Sikkim', 'Jorethang, Sikkim', 'Nayabazar, Sikkim', 'Singtam, Sikkim', 'Rangpo, Sikkim',
+            
+            // Tamil Nadu
+            'Chennai, Tamil Nadu', 'Coimbatore, Tamil Nadu', 'Madurai, Tamil Nadu', 'Tiruchirappalli, Tamil Nadu', 'Salem, Tamil Nadu', 'Tirunelveli, Tamil Nadu', 'Tiruppur, Tamil Nadu', 'Vellore, Tamil Nadu', 'Erode, Tamil Nadu', 'Thoothukkudi, Tamil Nadu', 'Dindigul, Tamil Nadu', 'Thanjavur, Tamil Nadu', 'Ranipet, Tamil Nadu', 'Sivakasi, Tamil Nadu', 'Karur, Tamil Nadu', 'Udhagamandalam, Tamil Nadu', 'Hosur, Tamil Nadu', 'Nagercoil, Tamil Nadu', 'Kanchipuram, Tamil Nadu', 'Kumarakonam, Tamil Nadu',
+            
+            // Telangana
+            'Hyderabad, Telangana', 'Warangal, Telangana', 'Nizamabad, Telangana', 'Khammam, Telangana', 'Karimnagar, Telangana', 'Ramagundam, Telangana', 'Mahabubnagar, Telangana', 'Nalgonda, Telangana', 'Adilabad, Telangana', 'Suryapet, Telangana', 'Miryalaguda, Telangana', 'Jagtial, Telangana', 'Mancherial, Telangana', 'Nirmal, Telangana', 'Kothagudem, Telangana',
+            
+            // Tripura
+            'Agartala, Tripura', 'Dharmanagar, Tripura', 'Udaipur, Tripura', 'Kailashahar, Tripura', 'Belonia, Tripura', 'Khowai, Tripura', 'Ambassa, Tripura', 'Ranir Bazar, Tripura',
+            
+            // Uttar Pradesh
+            'Lucknow, Uttar Pradesh', 'Kanpur, Uttar Pradesh', 'Ghaziabad, Uttar Pradesh', 'Agra, Uttar Pradesh', 'Varanasi, Uttar Pradesh', 'Meerut, Uttar Pradesh', 'Allahabad, Uttar Pradesh', 'Bareilly, Uttar Pradesh', 'Aligarh, Uttar Pradesh', 'Moradabad, Uttar Pradesh', 'Saharanpur, Uttar Pradesh', 'Gorakhpur, Uttar Pradesh', 'Noida, Uttar Pradesh', 'Firozabad, Uttar Pradesh', 'Jhansi, Uttar Pradesh', 'Muzaffarnagar, Uttar Pradesh', 'Mathura, Uttar Pradesh', 'Rampur, Uttar Pradesh', 'Shahjahanpur, Uttar Pradesh', 'Farrukhabad, Uttar Pradesh', 'Mau, Uttar Pradesh', 'Hapur, Uttar Pradesh', 'Etawah, Uttar Pradesh', 'Mirzapur, Uttar Pradesh', 'Bulandshahr, Uttar Pradesh', 'Sambhal, Uttar Pradesh', 'Amroha, Uttar Pradesh', 'Hardoi, Uttar Pradesh', 'Fatehpur, Uttar Pradesh', 'Raebareli, Uttar Pradesh',
+            
+            // Uttarakhand
+            'Dehradun, Uttarakhand', 'Haridwar, Uttarakhand', 'Roorkee, Uttarakhand', 'Haldwani, Uttarakhand', 'Rudrapur, Uttarakhand', 'Kashipur, Uttarakhand', 'Rishikesh, Uttarakhand', 'Kotdwar, Uttarakhand', 'Ramnagar, Uttarakhand', 'Pithoragarh, Uttarakhand', 'Jaspur, Uttarakhand', 'Almora, Uttarakhand', 'Bareilley, Uttarakhand', 'Nainital, Uttarakhand', 'Mussoorie, Uttarakhand',
+            
+            // West Bengal
+            'Kolkata, West Bengal', 'Howrah, West Bengal', 'Durgapur, West Bengal', 'Asansol, West Bengal', 'Siliguri, West Bengal', 'Malda, West Bengal', 'Bardhaman, West Bengal', 'Baharampur, West Bengal', 'Habra, West Bengal', 'Kharagpur, West Bengal', 'Shantipur, West Bengal', 'Dankuni, West Bengal', 'Dhulian, West Bengal', 'Ranaghat, West Bengal', 'Haldia, West Bengal', 'Raiganj, West Bengal', 'Krishnanagar, West Bengal', 'Nabadwip, West Bengal', 'Medinipur, West Bengal', 'Jalpaiguri, West Bengal',
+            
+            // Union Territories
+            'Chandigarh, India', 'Puducherry, India', 'Port Blair, Andaman and Nicobar', 'Kavaratti, Lakshadweep', 'Daman, Daman and Diu', 'Diu, Daman and Diu', 'Silvassa, Dadra and Nagar Haveli', 'Jammu, Jammu and Kashmir', 'Srinagar, Jammu and Kashmir', 'Leh, Ladakh', 'Kargil, Ladakh'
+        ];
+
+        // Comprehensive search database for food, restaurants, and cuisines
+        const searchDatabase = [
+            // Popular Dishes
+            { name: 'Pizza', type: 'dish', image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=32&h=32&fit=crop', description: 'Italian flatbread with toppings' },
+            { name: 'Burger', type: 'dish', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=32&h=32&fit=crop', description: 'Grilled patty in a bun' },
+            { name: 'Biryani', type: 'dish', image: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=32&h=32&fit=crop', description: 'Aromatic rice with meat/vegetables' },
+            { name: 'Pasta', type: 'dish', image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=32&h=32&fit=crop', description: 'Italian noodles with sauce' },
+            { name: 'Noodles', type: 'dish', image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=32&h=32&fit=crop', description: 'Asian stir-fried noodles' },
+            { name: 'Dosa', type: 'dish', image: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=32&h=32&fit=crop', description: 'South Indian crepe' },
+            { name: 'Idli', type: 'dish', image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=32&h=32&fit=crop', description: 'Steamed rice cakes' },
+            { name: 'Samosa', type: 'dish', image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=32&h=32&fit=crop', description: 'Fried pastry with filling' },
+            { name: 'Momos', type: 'dish', image: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=32&h=32&fit=crop', description: 'Steamed dumplings' },
+            { name: 'Paratha', type: 'dish', image: 'https://images.unsplash.com/photo-1574653853027-5d3ac9b9e7c4?w=32&h=32&fit=crop', description: 'Stuffed Indian flatbread' },
+            { name: 'Chole Bhature', type: 'dish', image: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=32&h=32&fit=crop', description: 'Chickpeas with fried bread' },
+            { name: 'Pav Bhaji', type: 'dish', image: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=32&h=32&fit=crop', description: 'Vegetable curry with bread' },
+            { name: 'Vada Pav', type: 'dish', image: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=32&h=32&fit=crop', description: 'Mumbai street food burger' },
+            { name: 'Tandoori Chicken', type: 'dish', image: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=32&h=32&fit=crop', description: 'Clay oven grilled chicken' },
+            { name: 'Butter Chicken', type: 'dish', image: 'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=32&h=32&fit=crop', description: 'Creamy tomato chicken curry' },
+            { name: 'Dal Makhani', type: 'dish', image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=32&h=32&fit=crop', description: 'Rich black lentil curry' },
+            { name: 'Paneer Tikka', type: 'dish', image: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=32&h=32&fit=crop', description: 'Grilled cottage cheese' },
+            { name: 'Fried Rice', type: 'dish', image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=32&h=32&fit=crop', description: 'Stir-fried rice with vegetables' },
+            { name: 'Manchurian', type: 'dish', image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=32&h=32&fit=crop', description: 'Indo-Chinese fried balls' },
+            { name: 'Spring Rolls', type: 'dish', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=32&h=32&fit=crop', description: 'Crispy vegetable rolls' },
+            { name: 'Sandwich', type: 'dish', image: 'https://images.unsplash.com/photo-1539252554453-80ab65ce3586?w=32&h=32&fit=crop', description: 'Grilled bread with filling' },
+            { name: 'Wraps', type: 'dish', image: 'https://images.unsplash.com/photo-1565299585323-38174c4a6471?w=32&h=32&fit=crop', description: 'Rolled flatbread with filling' },
+            { name: 'Salad', type: 'dish', image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=32&h=32&fit=crop', description: 'Fresh mixed vegetables' },
+            { name: 'Soup', type: 'dish', image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=32&h=32&fit=crop', description: 'Hot liquid dish' },
+            { name: 'Ice Cream', type: 'dish', image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=32&h=32&fit=crop', description: 'Frozen dessert' },
+            { name: 'Cake', type: 'dish', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=32&h=32&fit=crop', description: 'Sweet baked dessert' },
+            { name: 'Coffee', type: 'drink', image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=32&h=32&fit=crop', description: 'Hot brewed beverage' },
+            { name: 'Tea', type: 'drink', image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=32&h=32&fit=crop', description: 'Hot steeped beverage' },
+            { name: 'Lassi', type: 'drink', image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=32&h=32&fit=crop', description: 'Yogurt-based drink' },
+            { name: 'Juice', type: 'drink', image: 'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=32&h=32&fit=crop', description: 'Fresh fruit juice' },
+
+            // Cuisines
+            { name: 'Indian', type: 'cuisine', image: '🇮🇳', description: 'Traditional Indian food' },
+            { name: 'Chinese', type: 'cuisine', image: '🥢', description: 'Asian Chinese dishes' },
+            { name: 'Italian', type: 'cuisine', image: '🇮🇹', description: 'Pizza, pasta & more' },
+            { name: 'Mexican', type: 'cuisine', image: '🌮', description: 'Tacos, burritos & spicy food' },
+            { name: 'Thai', type: 'cuisine', image: '🇹🇭', description: 'Spicy Thai curries' },
+            { name: 'Continental', type: 'cuisine', image: '🍽️', description: 'European style food' },
+            { name: 'South Indian', type: 'cuisine', image: '🥥', description: 'Dosa, idli, sambar' },
+            { name: 'North Indian', type: 'cuisine', image: '🍛', description: 'Roti, dal, curry' },
+            { name: 'Punjabi', type: 'cuisine', image: '🫓', description: 'Rich & creamy dishes' },
+            { name: 'Bengali', type: 'cuisine', image: '🐟', description: 'Fish & rice dishes' },
+            { name: 'Gujarati', type: 'cuisine', image: '🥗', description: 'Vegetarian thali' },
+            { name: 'Rajasthani', type: 'cuisine', image: '👑', description: 'Royal Rajasthani food' },
+            { name: 'Maharashtrian', type: 'cuisine', image: '🌶️', description: 'Spicy Marathi food' },
+            { name: 'Japanese', type: 'cuisine', image: '🍣', description: 'Sushi & ramen' },
+            { name: 'Korean', type: 'cuisine', image: '🇰🇷', description: 'Kimchi & Korean BBQ' },
+            { name: 'American', type: 'cuisine', image: '🇺🇸', description: 'Burgers & fries' },
+            { name: 'Mediterranean', type: 'cuisine', image: '🫒', description: 'Healthy Mediterranean' },
+            { name: 'Lebanese', type: 'cuisine', image: '🥙', description: 'Hummus & kebabs' },
+            { name: 'Fast Food', type: 'cuisine', image: '🍟', description: 'Quick bites' },
+            { name: 'Street Food', type: 'cuisine', image: '🛺', description: 'Local street snacks' },
+
+            // Popular Restaurants
+            { name: 'McDonald\'s', type: 'restaurant', image: '🍟', description: 'Global fast food chain' },
+            { name: 'KFC', type: 'restaurant', image: '🍗', description: 'Fried chicken specialist' },
+            { name: 'Pizza Hut', type: 'restaurant', image: '🍕', description: 'Pizza delivery chain' },
+            { name: 'Domino\'s', type: 'restaurant', image: '🍕', description: 'Pizza in 30 minutes' },
+            { name: 'Burger King', type: 'restaurant', image: '🍔', description: 'Flame-grilled burgers' },
+            { name: 'Subway', type: 'restaurant', image: '🥪', description: 'Fresh submarine sandwiches' },
+            { name: 'Starbucks', type: 'restaurant', image: '☕', description: 'Premium coffee chain' },
+            { name: 'Cafe Coffee Day', type: 'restaurant', image: '☕', description: 'Indian coffee chain' },
+            { name: 'Haldiram\'s', type: 'restaurant', image: '🍬', description: 'Indian sweets & snacks' },
+            { name: 'Bikanervala', type: 'restaurant', image: '🍬', description: 'Traditional Indian sweets' },
+            { name: 'Wow! Momo', type: 'restaurant', image: '🥟', description: 'Momo specialist chain' },
+            { name: 'Faasos', type: 'restaurant', image: '🌯', description: 'Wraps & rolls delivery' },
+            { name: 'Behrouz Biryani', type: 'restaurant', image: '🍛', description: 'Premium biryani delivery' },
+            { name: 'Oven Story', type: 'restaurant', image: '🍕', description: 'Artisan pizza delivery' },
+            { name: 'Box8', type: 'restaurant', image: '📦', description: 'Desi meals in a box' },
+            { name: 'The Bowl Company', type: 'restaurant', image: '🥣', description: 'Healthy bowl meals' },
+            { name: 'Rolls Mania', type: 'restaurant', image: '🌯', description: 'Kathi rolls specialist' },
+            { name: 'Biryani Blues', type: 'restaurant', image: '🍛', description: 'Authentic biryani house' },
+            { name: 'Chai Point', type: 'restaurant', image: '🍵', description: 'Fresh chai & snacks' },
+            { name: 'Theobroma', type: 'restaurant', image: '🧁', description: 'Cakes & desserts' },
+
+            // Food Categories
+            { name: 'Breakfast', type: 'category', image: '🌅', description: 'Morning meals' },
+            { name: 'Lunch', type: 'category', image: '🌞', description: 'Afternoon meals' },
+            { name: 'Dinner', type: 'category', image: '🌙', description: 'Evening meals' },
+            { name: 'Snacks', type: 'category', image: '🍿', description: 'Light bites' },
+            { name: 'Desserts', type: 'category', image: '🍰', description: 'Sweet treats' },
+            { name: 'Beverages', type: 'category', image: '🥤', description: 'Drinks & juices' },
+            { name: 'Healthy', type: 'category', image: '🥗', description: 'Nutritious options' },
+            { name: 'Vegan', type: 'category', image: '🌱', description: 'Plant-based food' },
+            { name: 'Vegetarian', type: 'category', image: '🥬', description: 'No meat dishes' },
+            { name: 'Non-Vegetarian', type: 'category', image: '🍖', description: 'Meat dishes' },
+            { name: 'Spicy', type: 'category', image: '🌶️', description: 'Hot & spicy food' },
+            { name: 'Sweet', type: 'category', image: '🍯', description: 'Sweet dishes' },
+            { name: 'Combo', type: 'category', image: '🍽️', description: 'Meal combinations' },
+            { name: 'Family Pack', type: 'category', image: '👨‍👩‍👧‍👦', description: 'Serves 4+ people' }
+        ];
+
+        // Function to generate location suggestions
+        function generateLocationSuggestions(query, suggestionsContainer, inputElement) {
+            if (query.length === 0) {
+                suggestionsContainer.classList.add('hidden');
+                return;
+            }
+
+            // Filter locations based on input
+            const filteredLocations = locationDatabase.filter(location => 
+                location.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 8); // Show max 8 suggestions
+            
+            if (filteredLocations.length > 0) {
+                let suggestionsHTML = '';
+                filteredLocations.forEach((location, index) => {
+                    const isLast = index === filteredLocations.length - 1;
+                    suggestionsHTML += `
+                        <div class="p-3 hover:bg-gray-100 cursor-pointer flex items-center ${!isLast ? 'border-b' : ''}" data-location="${location}">
+                            <svg class="w-4 h-4 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <span class="text-gray-700">${location}</span>
+                        </div>
+                    `;
+                });
+                suggestionsContainer.innerHTML = suggestionsHTML;
+                suggestionsContainer.classList.remove('hidden');
+            } else {
+                // Show "No results found" message
+                suggestionsContainer.innerHTML = `
+                    <div class="p-3 text-center text-gray-500">
+                        <svg class="w-8 h-8 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <p class="text-sm">No locations found</p>
+                        <p class="text-xs text-gray-400">Try searching for a city or area name</p>
+                    </div>
+                `;
+                suggestionsContainer.classList.remove('hidden');
+            }
+        }
+
+        // Location input suggestions for mobile
+        locationInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            generateLocationSuggestions(query, locationSuggestions, this);
+        });
+
+        // Location input suggestions for desktop
+        locationInputDesktop.addEventListener('input', function() {
+            const query = this.value.trim();
+            generateLocationSuggestions(query, locationSuggestionsDesktop, this);
+        });
+
+        // Function to generate search suggestions
+        function generateSearchSuggestions(query, suggestionsContainer) {
+            if (query.length === 0) {
+                suggestionsContainer.classList.add('hidden');
+                return;
+            }
+
+            // Filter search database based on input
+            const filteredResults = searchDatabase.filter(item => 
+                item.name.toLowerCase().includes(query.toLowerCase()) ||
+                item.description.toLowerCase().includes(query.toLowerCase()) ||
+                item.type.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 8); // Show max 8 suggestions
+
+            if (filteredResults.length > 0) {
+                let suggestionsHTML = '';
+                filteredResults.forEach((item, index) => {
+                    const isLast = index === filteredResults.length - 1;
+                    const imageDisplay = item.image.startsWith('http') 
+                        ? `<img src="${item.image}" alt="${item.name}" class="w-8 h-8 rounded-full mr-3 object-cover">`
+                        : `<div class="w-8 h-8 rounded-full mr-3 flex items-center justify-center text-lg">${item.image}</div>`;
+                    
+                    const typeColor = {
+                        'dish': 'text-orange-600',
+                        'cuisine': 'text-blue-600', 
+                        'restaurant': 'text-green-600',
+                        'category': 'text-purple-600',
+                        'drink': 'text-cyan-600'
+                    }[item.type] || 'text-gray-600';
+
+                    suggestionsHTML += `
+                        <div class="p-3 hover:bg-gray-100 cursor-pointer flex items-center ${!isLast ? 'border-b' : ''}" data-search="${item.name}">
+                            ${imageDisplay}
+                            <div class="flex-1">
+                                <div class="font-medium text-gray-800">${item.name}</div>
+                                <div class="text-sm text-gray-500">${item.description}</div>
+                            </div>
+                            <div class="text-xs ${typeColor} font-medium uppercase px-2 py-1 bg-gray-100 rounded-full">
+                                ${item.type}
+                            </div>
+                        </div>
+                    `;
+                });
+                suggestionsContainer.innerHTML = suggestionsHTML;
+                suggestionsContainer.classList.remove('hidden');
+            } else {
+                // Show "No results found" message
+                suggestionsContainer.innerHTML = `
+                    <div class="p-4 text-center text-gray-500">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <p class="font-medium">No results found</p>
+                        <p class="text-sm text-gray-400">Try searching for dishes, restaurants, or cuisines</p>
+                    </div>
+                `;
+                suggestionsContainer.classList.remove('hidden');
+            }
+        }
+
+        // Search input suggestions for mobile
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            generateSearchSuggestions(query, searchSuggestions);
+        });
+
+        // Search input suggestions for desktop
+        searchInputDesktop.addEventListener('input', function() {
+            const query = this.value.trim();
+            generateSearchSuggestions(query, searchSuggestionsDesktop);
+        });
+
+        // Location suggestion clicks for mobile
+        locationSuggestions.addEventListener('click', function(e) {
+            const suggestionItem = e.target.closest('[data-location]');
+            if (suggestionItem) {
+                const selectedLocation = suggestionItem.getAttribute('data-location');
+                locationInput.value = selectedLocation;
+                locationSuggestions.classList.add('hidden');
+                
+                // Show confirmation
+                const tempIcon = locationInput.parentElement.querySelector('svg');
+                const originalIcon = tempIcon.innerHTML;
+                tempIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" class="text-green-600"></path>';
+                tempIcon.classList.add('text-green-600');
+                
+                setTimeout(() => {
+                    tempIcon.innerHTML = originalIcon;
+                    tempIcon.classList.remove('text-green-600');
+                }, 1500);
+            }
+        });
+
+        // Location suggestion clicks for desktop
+        locationSuggestionsDesktop.addEventListener('click', function(e) {
+            const suggestionItem = e.target.closest('[data-location]');
+            if (suggestionItem) {
+                const selectedLocation = suggestionItem.getAttribute('data-location');
+                locationInputDesktop.value = selectedLocation;
+                locationSuggestionsDesktop.classList.add('hidden');
+                
+                // Show confirmation
+                const tempIcon = locationInputDesktop.parentElement.querySelector('svg');
+                const originalIcon = tempIcon.innerHTML;
+                tempIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" class="text-green-600"></path>';
+                tempIcon.classList.add('text-green-600');
+                
+                setTimeout(() => {
+                    tempIcon.innerHTML = originalIcon;
+                    tempIcon.classList.remove('text-green-600');
+                }, 1500);
+            }
+        });
+
+        // Search suggestion clicks for mobile
+        searchSuggestions.addEventListener('click', function(e) {
+            const suggestionItem = e.target.closest('[data-search]');
+            if (suggestionItem) {
+                const selectedSearch = suggestionItem.getAttribute('data-search');
+                searchInput.value = selectedSearch;
+                searchSuggestions.classList.add('hidden');
+            }
+        });
+
+        // Search suggestion clicks for desktop
+        searchSuggestionsDesktop.addEventListener('click', function(e) {
+            const suggestionItem = e.target.closest('[data-search]');
+            if (suggestionItem) {
+                const selectedSearch = suggestionItem.getAttribute('data-search');
+                searchInputDesktop.value = selectedSearch;
+                searchSuggestionsDesktop.classList.add('hidden');
+            }
+        });
+
+        // Detect location functionality for mobile
+        detectLocationBtn.addEventListener('click', function() {
+            if (navigator.geolocation) {
+                this.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>';
+                
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        locationInput.value = "Current Location";
+                        detectLocationBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg>';
+                        alert('📍 Location detected successfully!\n\nUsing your current location for food delivery.');
+                    },
+                    function(error) {
+                        detectLocationBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg>';
+                        alert('❌ Unable to detect location.\n\nPlease enter your location manually or check location permissions.');
+                    }
+                );
+            } else {
+                alert('❌ Geolocation not supported.\n\nPlease enter your location manually.');
+            }
+        });
+
+        // Detect location functionality for desktop
+        detectLocationDesktop.addEventListener('click', function() {
+            if (navigator.geolocation) {
+                this.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>';
+                
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        locationInputDesktop.value = "Current Location";
+                        detectLocationDesktop.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg>';
+                        alert('📍 Location detected successfully!\n\nUsing your current location for food delivery.');
+                    },
+                    function(error) {
+                        detectLocationDesktop.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg>';
+                        alert('❌ Unable to detect location.\n\nPlease enter your location manually or check location permissions.');
+                    }
+                );
+            } else {
+                alert('❌ Geolocation not supported.\n\nPlease enter your location manually.');
+            }
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            // Mobile location suggestions
+            if (!locationInput.contains(e.target) && !locationSuggestions.contains(e.target)) {
+                locationSuggestions.classList.add('hidden');
+            }
+            // Desktop location suggestions
+            if (!locationInputDesktop.contains(e.target) && !locationSuggestionsDesktop.contains(e.target)) {
+                locationSuggestionsDesktop.classList.add('hidden');
+            }
+            // Mobile search suggestions
+            if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+                searchSuggestions.classList.add('hidden');
+            }
+            // Desktop search suggestions
+            if (!searchInputDesktop.contains(e.target) && !searchSuggestionsDesktop.contains(e.target)) {
+                searchSuggestionsDesktop.classList.add('hidden');
+            }
+        });
+
+        // Enhanced search button functionality for mobile
+        searchBtn.addEventListener('click', function() {
+            const location = locationInput.value.trim();
+            const search = searchInput.value.trim();
+            
+            if (location && search) {
+                // Show loading state
+                this.innerHTML = '<svg class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Searching...';
+                
+                setTimeout(() => {
+                    this.innerHTML = '<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>Search';
+                    alert(`🔍 Search Results\n\nFound 25+ restaurants for "${search}" in ${location}!\n\n📊 Results sorted by:\n• Relevance ⭐\n• Rating 🌟\n• Delivery time ⏰\n• Cost 💰\n\nShowing best matches first!`);
+                }, 1500);
+            } else if (!location) {
+                locationInput.focus();
+                locationInput.classList.add('border-red-500');
+                setTimeout(() => locationInput.classList.remove('border-red-500'), 2000);
+                alert('📍 Please enter your location first');
+            } else {
+                searchInput.focus();
+                searchInput.classList.add('border-red-500');
+                setTimeout(() => searchInput.classList.remove('border-red-500'), 2000);
+                alert('🔍 Please enter what you want to search for');
+            }
+        });
+
+        // Enhanced search button functionality for desktop
+        searchBtnDesktop.addEventListener('click', function() {
+            const location = locationInputDesktop.value.trim();
+            const search = searchInputDesktop.value.trim();
+            
+            if (location && search) {
+                // Show loading state
+                this.innerHTML = '<svg class="w-5 h-5 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg><span class="hidden lg:inline">Searching...</span>';
+                
+                setTimeout(() => {
+                    this.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg><span class="hidden lg:inline">Search</span>';
+                    alert(`🔍 Search Results\n\nFound 25+ restaurants for "${search}" in ${location}!\n\n📊 Results sorted by:\n• Relevance ⭐\n• Rating 🌟\n• Delivery time ⏰\n• Cost 💰\n\nShowing best matches first!`);
+                }, 1500);
+            } else if (!location) {
+                locationInputDesktop.focus();
+                locationInputDesktop.classList.add('border-red-500');
+                setTimeout(() => locationInputDesktop.classList.remove('border-red-500'), 2000);
+                alert('📍 Please enter your location first');
+            } else {
+                searchInputDesktop.focus();
+                searchInputDesktop.classList.add('border-red-500');
+                setTimeout(() => searchInputDesktop.classList.remove('border-red-500'), 2000);
+                alert('🔍 Please enter what you want to search for');
+            }
+        });
+
+        // Enter key support for mobile
+        locationInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchInput.focus();
+            }
+        });
+
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchBtn.click();
+            }
+        });
+
+        // Enter key support for desktop
+        locationInputDesktop.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchInputDesktop.focus();
+            }
+        });
+
+        searchInputDesktop.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchBtnDesktop.click();
+            }
+        });
+
+        // Restaurant card clicks
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.addEventListener('click', function() {
+                const restaurantName = this.querySelector('h3').textContent;
+                const rating = this.querySelector('.bg-green-600').textContent;
+                const cuisine = this.querySelector('.text-gray-600').textContent;
+                alert(`Opening ${restaurantName}\n${rating}\n${cuisine}\n\nLoading menu...`);
+            });
+        });
+
+        // Category clicks
+        document.querySelectorAll('.text-center.cursor-pointer.group').forEach(category => {
+            category.addEventListener('click', function() {
+                const categoryName = this.querySelector('p').textContent;
+                searchInput.value = categoryName;
+                if (locationInput.value) {
+                    searchBtn.click();
+                } else {
+                    locationInput.focus();
+                    alert(`Enter your location to find ${categoryName} restaurants`);
+                }
+            });
+        });
+
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const hamburgerIcon = document.getElementById('hamburgerIcon');
+        const closeIcon = document.getElementById('closeIcon');
+        const cartBtnMobile = document.getElementById('cartBtnMobile');
+        const cartCountMobile = document.getElementById('cartCountMobile');
+        const loginBtnMobile = document.getElementById('loginBtnMobile');
+        const signUpBtnMobile = document.getElementById('signUpBtnMobile');
+
+        // Toggle mobile menu
+        mobileMenuBtn.addEventListener('click', function() {
+            const isOpen = !mobileMenu.classList.contains('hidden');
+            
+            if (isOpen) {
+                // Close menu
+                mobileMenu.classList.add('hidden');
+                hamburgerIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            } else {
+                // Open menu
+                mobileMenu.classList.remove('hidden');
+                hamburgerIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+                hamburgerIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        });
+
+        // Mobile cart button functionality
+        cartBtnMobile.addEventListener('click', function() {
+            updateCartModal();
+            cartModal.classList.remove('hidden');
+            // Close mobile menu
+            mobileMenu.classList.add('hidden');
+            hamburgerIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+        });
+
+        // Mobile login button functionality
+        loginBtnMobile.addEventListener('click', function() {
+            if (userData.isLoggedIn) {
+                // Show user profile info
+                alert(`👤 Profile Information\n\nName: ${userData.name}\nEmail: ${userData.email}\nPhone: ${userData.phone}\n\nAccount Status: Active ✅\n\nYou can continue ordering food or logout from the logout button.`);
+            } else {
+                loginModal.classList.remove('hidden');
+            }
+            // Close mobile menu
+            mobileMenu.classList.add('hidden');
+            hamburgerIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+        });
+
+        // Mobile sign up button functionality
+        signUpBtnMobile.addEventListener('click', function() {
+            if (userData.isLoggedIn) {
+                // Handle logout
+                if (confirm('Are you sure you want to logout?')) {
+                    userData = {
+                        isLoggedIn: false,
+                        name: '',
+                        email: '',
+                        phone: '',
+                        password: ''
+                    };
+                    
+                    // Reset UI for both desktop and mobile
+                    loginBtn.textContent = 'Login';
+                    loginBtn.classList.remove('text-green-600');
+                    signUpBtn.textContent = 'Sign Up';
+                    signUpBtn.classList.remove('bg-gray-600', 'hover:bg-gray-700');
+                    signUpBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+                    
+                    loginBtnMobile.innerHTML = '<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Login';
+                    signUpBtnMobile.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>Sign Up';
+                    signUpBtnMobile.classList.remove('bg-gray-600', 'hover:bg-gray-700');
+                    signUpBtnMobile.classList.add('bg-red-600', 'hover:bg-red-700');
+                    
+                    // Clear login form
+                    loginForm.reset();
+                    
+                    // Clear cart
+                    cart = [];
+                    updateCartCount();
+                    
+                    alert('👋 Logged out successfully!\n\nThank you for using Zomato. Come back soon!');
+                }
+            } else {
+                signUpModal.classList.remove('hidden');
+            }
+            // Close mobile menu
+            mobileMenu.classList.add('hidden');
+            hamburgerIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+        });
+
+        // Cart functionality
+        let cart = [];
+        const cartCount = document.getElementById('cartCount');
+        const cartBtn = document.getElementById('cartBtn');
+
+        function updateCartCount() {
+            if (cart.length > 0) {
+                cartCount.textContent = cart.length;
+                cartCount.classList.remove('hidden');
+                cartCountMobile.textContent = cart.length;
+                cartCountMobile.classList.remove('hidden');
+            } else {
+                cartCount.classList.add('hidden');
+                cartCountMobile.classList.add('hidden');
+            }
+        }
+
+        // Add to cart functionality
+        document.addEventListener('click', function(e) {
+            // Check if clicked element or its parent has add-to-cart class
+            const addToCartBtn = e.target.closest('.add-to-cart');
+            if (addToCartBtn) {
+                e.stopPropagation(); // Prevent card click
+                const restaurant = addToCartBtn.getAttribute('data-restaurant');
+                const price = addToCartBtn.getAttribute('data-price');
+                
+                // Add to cart
+                cart.push({
+                    restaurant: restaurant,
+                    price: parseInt(price),
+                    id: Date.now()
+                });
+                
+                // Update button text temporarily
+                const originalHTML = addToCartBtn.innerHTML;
+                addToCartBtn.innerHTML = 'Added!';
+                addToCartBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                addToCartBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                
+                setTimeout(() => {
+                    addToCartBtn.innerHTML = originalHTML;
+                    addToCartBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    addToCartBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+                }, 1500);
+                
+                updateCartCount();
+                alert(`${restaurant} added to cart!\nPrice: ₹${price} for two`);
+            }
+        });
+
+        // Cart modal functionality
+        const cartModal = document.getElementById('cartModal');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const closeCartModal = document.getElementById('closeCartModal');
+        const clearCart = document.getElementById('clearCart');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        // Payment modal functionality
+        const paymentModal = document.getElementById('paymentModal');
+        const closePaymentModal = document.getElementById('closePaymentModal');
+        const backToCart = document.getElementById('backToCart');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+        const paymentOrderItems = document.getElementById('paymentOrderItems');
+        const paymentOrderTotal = document.getElementById('paymentOrderTotal');
+        const deliveryName = document.getElementById('deliveryName');
+        const deliveryPhone = document.getElementById('deliveryPhone');
+        const deliveryAddress = document.getElementById('deliveryAddress');
+
+        function updateCartModal() {
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="text-center text-gray-500 py-8"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L5 3H3m4 10v6a1 1 0 001 1h10a1 1 0 001-1v-6M9 19a1 1 0 100 2 1 1 0 000-2zm8 0a1 1 0 100 2 1 1 0 000-2z"></path></svg><p class="text-lg font-medium">Your cart is empty</p><p class="text-sm">Add some delicious food from restaurants below</p></div>';
+                cartTotal.innerHTML = '';
+                return;
+            }
+
+            let itemsHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                total += item.price;
+                itemsHTML += `
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex-1">
+                            <h4 class="font-medium text-gray-800">${item.restaurant}</h4>
+                            <p class="text-sm text-gray-600">₹${item.price} for two</p>
+                        </div>
+                        <button class="text-red-600 hover:text-red-700 remove-item" data-index="${index}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+            });
+
+            cartItems.innerHTML = itemsHTML;
+            cartTotal.innerHTML = `
+                <div class="flex justify-between items-center text-lg font-semibold">
+                    <span>Total Amount:</span>
+                    <span class="text-red-600">₹${total}</span>
+                </div>
+                <p class="text-sm text-gray-600 mt-1">Delivery charges will be calculated at checkout</p>
+            `;
+        }
+
+        function updatePaymentModal() {
+            if (cart.length === 0) return;
+
+            let itemsHTML = '';
+            let subtotal = 0;
+
+            cart.forEach((item) => {
+                subtotal += item.price;
+                itemsHTML += `
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-700">${item.restaurant}</span>
+                        <span class="font-medium">₹${item.price}</span>
+                    </div>
+                `;
+            });
+
+            const deliveryFee = subtotal > 500 ? 0 : 40;
+            const gst = Math.round(subtotal * 0.05);
+            const platformFee = 5;
+            const total = subtotal + deliveryFee + gst + platformFee;
+
+            paymentOrderItems.innerHTML = itemsHTML;
+            paymentOrderTotal.innerHTML = `
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Subtotal</span>
+                        <span>₹${subtotal}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Delivery Fee</span>
+                        <span class="${deliveryFee === 0 ? 'text-green-600' : ''}">${deliveryFee === 0 ? 'FREE' : '₹' + deliveryFee}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">GST (5%)</span>
+                        <span>₹${gst}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Platform Fee</span>
+                        <span>₹${platformFee}</span>
+                    </div>
+                    <div class="border-t pt-2 flex justify-between font-semibold text-lg">
+                        <span>Total Amount</span>
+                        <span class="text-red-600">₹${total}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Cart button click
+        cartBtn.addEventListener('click', function() {
+            updateCartModal();
+            cartModal.classList.remove('hidden');
+        });
+
+        // Close cart modal
+        closeCartModal.addEventListener('click', function() {
+            cartModal.classList.add('hidden');
+        });
+
+        // Remove item from cart
+        cartItems.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-item')) {
+                const index = parseInt(e.target.closest('.remove-item').getAttribute('data-index'));
+                cart.splice(index, 1);
+                updateCartCount();
+                updateCartModal();
+            }
+        });
+
+        // Clear cart
+        clearCart.addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear your cart?')) {
+                cart = [];
+                updateCartCount();
+                updateCartModal();
+            }
+        });
+
+        // Checkout
+        checkoutBtn.addEventListener('click', function() {
+            if (cart.length === 0) return;
+            
+            cartModal.classList.add('hidden');
+            paymentModal.classList.remove('hidden');
+            updatePaymentModal();
+        });
+
+        // Modal functionality
+        const loginModal = document.getElementById('loginModal');
+        const signUpModal = document.getElementById('signUpModal');
+        const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const signUpBtn = document.getElementById('signUpBtn');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+        const closeSignUpModal = document.getElementById('closeSignUpModal');
+        const closeForgotPasswordModal = document.getElementById('closeForgotPasswordModal');
+        const switchToSignUp = document.getElementById('switchToSignUp');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+        const backToLogin = document.getElementById('backToLogin');
+        const loginForm = document.getElementById('loginForm');
+        const signUpForm = document.getElementById('signUpForm');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+
+        // Open modals and handle logout
+        loginBtn.addEventListener('click', function() {
+            if (userData.isLoggedIn) {
+                // Show user profile info
+                alert(`👤 Profile Information\n\nName: ${userData.name}\nEmail: ${userData.email}\nPhone: ${userData.phone}\n\nAccount Status: Active ✅\n\nYou can continue ordering food or logout from the logout button.`);
+            } else {
+                loginModal.classList.remove('hidden');
+            }
+        });
+
+        signUpBtn.addEventListener('click', function() {
+            if (userData.isLoggedIn) {
+                // Handle logout
+                if (confirm('Are you sure you want to logout?')) {
+                    userData = {
+                        isLoggedIn: false,
+                        name: '',
+                        email: '',
+                        phone: '',
+                        password: ''
+                    };
+                    
+                    // Reset UI
+                    loginBtn.textContent = 'Login';
+                    loginBtn.classList.remove('text-green-600');
+                    signUpBtn.textContent = 'Sign Up';
+                    signUpBtn.classList.remove('bg-gray-600', 'hover:bg-gray-700');
+                    signUpBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+                    
+                    // Clear login form
+                    loginForm.reset();
+                    
+                    // Clear cart
+                    cart = [];
+                    updateCartCount();
+                    
+                    alert('👋 Logged out successfully!\n\nThank you for using Zomato. Come back soon!');
+                }
+            } else {
+                signUpModal.classList.remove('hidden');
+            }
+        });
+
+        // Close modals
+        closeLoginModal.addEventListener('click', function() {
+            loginModal.classList.add('hidden');
+        });
+
+        closeSignUpModal.addEventListener('click', function() {
+            signUpModal.classList.add('hidden');
+        });
+
+        closeForgotPasswordModal.addEventListener('click', function() {
+            forgotPasswordModal.classList.add('hidden');
+        });
+
+        // Switch between modals
+        switchToSignUp.addEventListener('click', function() {
+            loginModal.classList.add('hidden');
+            signUpModal.classList.remove('hidden');
+        });
+
+        switchToLogin.addEventListener('click', function() {
+            signUpModal.classList.add('hidden');
+            loginModal.classList.remove('hidden');
+        });
+
+        forgotPasswordBtn.addEventListener('click', function() {
+            loginModal.classList.add('hidden');
+            forgotPasswordModal.classList.remove('hidden');
+        });
+
+        backToLogin.addEventListener('click', function() {
+            forgotPasswordModal.classList.add('hidden');
+            loginModal.classList.remove('hidden');
+        });
+
+        // Payment modal event listeners
+        closePaymentModal.addEventListener('click', function() {
+            paymentModal.classList.add('hidden');
+        });
+
+        backToCart.addEventListener('click', function() {
+            paymentModal.classList.add('hidden');
+            cartModal.classList.remove('hidden');
+        });
+
+        placeOrderBtn.addEventListener('click', function() {
+            const name = deliveryName.value.trim();
+            const phone = deliveryPhone.value.trim();
+            const address = deliveryAddress.value.trim();
+            const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            // Validate delivery details
+            if (!name || !phone || !address) {
+                if (!name) deliveryName.focus();
+                else if (!phone) deliveryPhone.focus();
+                else deliveryAddress.focus();
+                
+                alert('Please fill in all delivery details');
+                return;
+            }
+
+            if (phone.length < 10) {
+                deliveryPhone.focus();
+                alert('Please enter a valid phone number');
+                return;
+            }
+
+            // Calculate totals
+            const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+            const deliveryFee = subtotal > 500 ? 0 : 40;
+            const gst = Math.round(subtotal * 0.05);
+            const platformFee = 5;
+            const total = subtotal + deliveryFee + gst + platformFee;
+            const orderId = '#ZOM' + Math.random().toString(36).substr(2, 6).toUpperCase();
+
+            // Show loading state
+            this.innerHTML = '<svg class="w-5 h-5 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Processing...';
+            this.disabled = true;
+
+            setTimeout(() => {
+                let paymentMethodText = '';
+                let deliveryTime = '25-30 minutes';
+                
+                switch(selectedPayment) {
+                    case 'cod':
+                        paymentMethodText = 'Cash on Delivery';
+                        break;
+                    case 'online':
+                        paymentMethodText = 'Online Payment (5% discount applied)';
+                        deliveryTime = '20-25 minutes';
+                        break;
+                    case 'upi':
+                        paymentMethodText = 'UPI Payment';
+                        deliveryTime = '20-25 minutes';
+                        break;
+                    case 'card':
+                        paymentMethodText = 'Credit/Debit Card';
+                        deliveryTime = '20-25 minutes';
+                        break;
+                    case 'netbanking':
+                        paymentMethodText = 'Net Banking';
+                        deliveryTime = '20-25 minutes';
+                        break;
+                    case 'wallet':
+                        paymentMethodText = 'Digital Wallet';
+                        deliveryTime = '20-25 minutes';
+                        break;
+                }
+
+                showOrderSuccessMessage(orderId, total, paymentMethodText, name, phone, address, deliveryTime);
+                
+                // Reset everything
+                cart = [];
+                updateCartCount();
+                paymentModal.classList.add('hidden');
+                
+                // Clear form
+                deliveryName.value = '';
+                deliveryPhone.value = '';
+                deliveryAddress.value = '';
+                document.querySelector('input[name="paymentMethod"][value="cod"]').checked = true;
+                
+                this.innerHTML = 'Place Order';
+                this.disabled = false;
+            }, 2000);
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === loginModal) {
+                loginModal.classList.add('hidden');
+            }
+            if (e.target === signUpModal) {
+                signUpModal.classList.add('hidden');
+            }
+            if (e.target === forgotPasswordModal) {
+                forgotPasswordModal.classList.add('hidden');
+            }
+            if (e.target === cartModal) {
+                cartModal.classList.add('hidden');
+            }
+            if (e.target === paymentModal) {
+                paymentModal.classList.add('hidden');
+            }
+        });
+
+        // User data storage
+        let userData = {
+            isLoggedIn: false,
+            name: '',
+            email: '',
+            phone: '',
+            password: ''
+        };
+
+        // Beautiful success message function
+        function showSuccessMessage(title, message) {
+            // Create success modal
+            const successModal = document.createElement('div');
+            successModal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            successModal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-md w-full text-center transform scale-95 opacity-0 transition-all duration-300">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">${title}</h2>
+                    <p class="text-gray-600 mb-6">${message}</p>
+                    <button class="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors font-medium">
+                        Start Ordering! 🍕
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(successModal);
+            
+            // Animate in
+            setTimeout(() => {
+                const modal = successModal.querySelector('div');
+                modal.classList.remove('scale-95', 'opacity-0');
+                modal.classList.add('scale-100', 'opacity-100');
+            }, 100);
+            
+            // Close on button click
+            successModal.querySelector('button').addEventListener('click', () => {
+                const modal = successModal.querySelector('div');
+                modal.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    document.body.removeChild(successModal);
+                }, 300);
+            });
+            
+            // Auto close after 5 seconds
+            setTimeout(() => {
+                if (document.body.contains(successModal)) {
+                    const modal = successModal.querySelector('div');
+                    modal.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => {
+                        document.body.removeChild(successModal);
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        // Beautiful order success message function
+        function showOrderSuccessMessage(orderId, total, paymentMethod, name, phone, address, deliveryTime) {
+            const orderModal = document.createElement('div');
+            orderModal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+            orderModal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-lg w-full text-center transform scale-95 opacity-0 transition-all duration-300">
+                    <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Order Placed Successfully! 🎉</h2>
+                    <p class="text-lg font-semibold text-red-600 mb-6">${orderId}</p>
+                    
+                    <div class="bg-gray-50 rounded-xl p-6 mb-6 text-left">
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-gray-600">Total Amount:</span>
+                                <p class="font-semibold text-lg">₹${total}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-600">Delivery Time:</span>
+                                <p class="font-semibold text-green-600">${deliveryTime}</p>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="text-gray-600">Payment Method:</span>
+                                <p class="font-medium">${paymentMethod}</p>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="text-gray-600">Delivery Address:</span>
+                                <p class="font-medium">${name} - ${phone}</p>
+                                <p class="text-gray-700">${address}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <button class="flex-1 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium track-order-btn">
+                            Track Order 📍
+                        </button>
+                        <button class="flex-1 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors font-medium continue-btn">
+                            Continue Shopping 🛒
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(orderModal);
+            
+            // Animate in
+            setTimeout(() => {
+                const modal = orderModal.querySelector('div');
+                modal.classList.remove('scale-95', 'opacity-0');
+                modal.classList.add('scale-100', 'opacity-100');
+            }, 100);
+            
+            // Track order button
+            orderModal.querySelector('.track-order-btn').addEventListener('click', () => {
+                alert(`📍 Order Tracking\n\nOrder ID: ${orderId}\nStatus: Confirmed ✅\n\n🍳 Your order is being prepared\n⏰ Estimated delivery: ${deliveryTime}\n\nYou'll receive SMS updates on ${phone}`);
+            });
+            
+            // Continue shopping button
+            orderModal.querySelector('.continue-btn').addEventListener('click', () => {
+                const modal = orderModal.querySelector('div');
+                modal.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    document.body.removeChild(orderModal);
+                }, 300);
+            });
+        }
+
+        // Login form submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+            
+            // Check if user exists and password matches
+            if (userData.email && userData.email === email && userData.password === password) {
+                // Simulate login process
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Logging in...';
+                submitBtn.disabled = true;
+                
+                setTimeout(() => {
+                    userData.isLoggedIn = true;
+                    showSuccessMessage(`Welcome back, ${userData.name}!`, 'Logged in successfully! You can now order food and track your orders.');
+                    loginModal.classList.add('hidden');
+                    
+                    // Update desktop UI
+                    loginBtn.textContent = userData.name;
+                    loginBtn.classList.add('text-green-600');
+                    signUpBtn.textContent = 'Logout';
+                    signUpBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                    signUpBtn.classList.add('bg-gray-600', 'hover:bg-gray-700');
+                    
+                    // Update mobile UI
+                    loginBtnMobile.innerHTML = `<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>${userData.name}`;
+                    loginBtnMobile.classList.add('text-green-600');
+                    signUpBtnMobile.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>Logout';
+                    signUpBtnMobile.classList.remove('bg-red-600', 'hover:bg-red-700');
+                    signUpBtnMobile.classList.add('bg-gray-600', 'hover:bg-gray-700');
+                    
+                    submitBtn.textContent = 'Login';
+                    submitBtn.disabled = false;
+                    this.reset();
+                }, 1500);
+            } else if (userData.email && userData.email === email) {
+                // Wrong password
+                alert('❌ Incorrect password!\n\nPlease check your password and try again.');
+                this.querySelector('input[type="password"]').focus();
+                this.querySelector('input[type="password"]').classList.add('border-red-500');
+                setTimeout(() => this.querySelector('input[type="password"]').classList.remove('border-red-500'), 2000);
+            } else {
+                // User doesn't exist
+                alert('❌ Account not found!\n\nThis email is not registered. Please sign up first or check your email address.');
+                this.querySelector('input[type="email"]').focus();
+                this.querySelector('input[type="email"]').classList.add('border-red-500');
+                setTimeout(() => this.querySelector('input[type="email"]').classList.remove('border-red-500'), 2000);
+            }
+        });
+
+        // Sign up form submission
+        signUpForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = this.querySelector('input[type="text"]').value;
+            const email = this.querySelector('input[type="email"]').value;
+            const phone = this.querySelector('input[type="tel"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+            
+            // Check if email already exists
+            if (userData.email === email) {
+                alert('❌ Email already registered!\n\nThis email is already associated with an account. Please login instead.');
+                this.querySelector('input[type="email"]').focus();
+                this.querySelector('input[type="email"]').classList.add('border-red-500');
+                setTimeout(() => this.querySelector('input[type="email"]').classList.remove('border-red-500'), 2000);
+                return;
+            }
+            
+            // Simulate sign up process
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Creating Account...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                // Store user data
+                userData = {
+                    isLoggedIn: true,
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    password: password
+                };
+                
+                // Auto-fill login form
+                const loginEmailInput = loginForm.querySelector('input[type="email"]');
+                const loginPasswordInput = loginForm.querySelector('input[type="password"]');
+                loginEmailInput.value = email;
+                loginPasswordInput.value = password;
+                
+                // Show beautiful success message
+                showSuccessMessage(`Welcome to Zomato, ${name}!`, 'Account created successfully! You are now logged in and can start ordering delicious food.');
+                
+                signUpModal.classList.add('hidden');
+                
+                // Update desktop UI
+                loginBtn.textContent = name;
+                loginBtn.classList.add('text-green-600');
+                signUpBtn.textContent = 'Logout';
+                signUpBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                signUpBtn.classList.add('bg-gray-600', 'hover:bg-gray-700');
+                
+                // Update mobile UI
+                loginBtnMobile.innerHTML = `<svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>${name}`;
+                loginBtnMobile.classList.add('text-green-600');
+                signUpBtnMobile.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>Logout';
+                signUpBtnMobile.classList.remove('bg-red-600', 'hover:bg-red-700');
+                signUpBtnMobile.classList.add('bg-gray-600', 'hover:bg-gray-700');
+                
+                submitBtn.textContent = 'Create Account';
+                submitBtn.disabled = false;
+                this.reset();
+            }, 2000);
+        });
+
+        // Forgot password form submission
+        forgotPasswordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            
+            // Simulate password reset process
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Sending Reset Link...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                alert(`Password reset link sent! 📧\n\nWe've sent a password reset link to ${email}.\n\nPlease check your email and follow the instructions to reset your password.`);
+                forgotPasswordModal.classList.add('hidden');
+                submitBtn.textContent = 'Send Reset Link';
+                submitBtn.disabled = false;
+                this.reset();
+            }, 2000);
+        });
+
+        // Enhanced app download functionality
+        const appLinkInput = document.getElementById('appLinkInput');
+        const shareAppLinkBtn = document.getElementById('shareAppLinkBtn');
+        const contactMethodRadios = document.querySelectorAll('input[name="contactMethod"]');
+
+        // Update placeholder based on contact method
+        contactMethodRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'email') {
+                    appLinkInput.placeholder = 'Enter your email';
+                    appLinkInput.type = 'email';
+                } else {
+                    appLinkInput.placeholder = 'Enter your phone number';
+                    appLinkInput.type = 'tel';
+                }
+                appLinkInput.value = '';
+            });
+        });
+
+        shareAppLinkBtn.addEventListener('click', function() {
+            const contactValue = appLinkInput.value.trim();
+            const selectedMethod = document.querySelector('input[name="contactMethod"]:checked').value;
+            
+            if (!contactValue) {
+                appLinkInput.focus();
+                appLinkInput.classList.add('border-red-500');
+                setTimeout(() => appLinkInput.classList.remove('border-red-500'), 2000);
+                alert(`Please enter your ${selectedMethod}`);
+                return;
+            }
+
+            // Validate input based on method
+            if (selectedMethod === 'email' && !contactValue.includes('@')) {
+                appLinkInput.focus();
+                appLinkInput.classList.add('border-red-500');
+                setTimeout(() => appLinkInput.classList.remove('border-red-500'), 2000);
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            if (selectedMethod === 'phone' && contactValue.length < 10) {
+                appLinkInput.focus();
+                appLinkInput.classList.add('border-red-500');
+                setTimeout(() => appLinkInput.classList.remove('border-red-500'), 2000);
+                alert('Please enter a valid phone number');
+                return;
+            }
+
+            // Show loading state
+            this.innerHTML = '<svg class="w-5 h-5 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Sending...';
+            this.disabled = true;
+
+            setTimeout(() => {
+                this.innerHTML = 'Send Link';
+                this.disabled = false;
+                alert(`App download link sent! 📱\n\nWe've sent the Zomato app download link to your ${selectedMethod}: ${contactValue}\n\n${selectedMethod === 'email' ? 'Check your email' : 'Check your SMS'} and click the link to download the app.`);
+                appLinkInput.value = '';
+            }, 2000);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96c7e1bef7097a13',t:'MTc1NDc0OTA5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
